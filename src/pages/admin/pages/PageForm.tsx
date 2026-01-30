@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import api from '../../../lib/axios';
-import { Save, ArrowLeft, Upload, X } from 'lucide-react';
+import { Save, ArrowLeft, Upload } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { fixImageUrl } from '../../../lib/utils';
 

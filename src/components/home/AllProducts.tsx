@@ -31,7 +31,10 @@ const AllProducts = () => {
     }, []);
 
     const filteredProducts = selectedCategory
-        ? products.filter(p => p.category?.id === selectedCategory)
+        ? products.filter(p => {
+            const categoryId = typeof p.category === 'object' ? p.category?.id : p.category;
+            return categoryId === selectedCategory;
+        })
         : products;
 
     const displayedProducts = filteredProducts.slice(0, displayCount);
@@ -124,7 +127,7 @@ const AllProducts = () => {
                                             {/* Content Section */}
                                             <div className="p-6 flex-1 flex flex-col">
                                                 <div className="text-xs text-[#C41E3A] mb-2 uppercase tracking-wider font-semibold font-display">
-                                                    {product.category?.name || 'Uncategorized'}
+                                                    {(typeof product.category === 'object' ? product.category?.name : null) || 'Uncategorized'}
                                                 </div>
                                                 <h3 className="font-bold text-white text-lg line-clamp-2 group-hover:text-[#C41E3A] transition-colors font-display">
                                                     {product.name}
