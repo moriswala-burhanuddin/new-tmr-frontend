@@ -26,8 +26,16 @@ export function fixImageUrl(url: string | null | undefined): string | undefined 
 
     // Handle relative URLs from Django (media files)
     if (url.startsWith('/')) {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8001';
-        return `${baseUrl}${url}`;
+        let baseUrl = import.meta.env.VITE_API_URL || '';
+        // Remove /api if present at the end
+        baseUrl = baseUrl.replace(/\/api\/?$/, '');
+
+        // If still empty, we have no base URL, return as is or use a safe fallback
+        if (!baseUrl) return url;
+
+        // Ensure no trailing slash on baseUrl before joining
+        const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+        return `${cleanBaseUrl}${url}`;
     }
 
     return url;
