@@ -17,7 +17,7 @@ const AdminLogin = () => {
         setError('');
 
         try {
-            const response = await api.post('/auth/login/', { username, password });
+            const response = await api.post('auth/login/', { username, password });
             login(response.data.token);
             navigate('/admin/dashboard');
         } catch (err) {
