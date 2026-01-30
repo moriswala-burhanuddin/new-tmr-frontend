@@ -16,8 +16,8 @@ const AllProducts = () => {
         const fetchData = async () => {
             try {
                 const [productsRes, categoriesRes] = await Promise.all([
-                    api.get('/products/'),
-                    api.get('/categories/')
+                    api.get('products/'),
+                    api.get('categories/')
                 ]);
                 setProducts(productsRes.data);
                 setCategories(categoriesRes.data);

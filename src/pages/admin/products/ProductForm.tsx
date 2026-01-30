@@ -35,14 +35,14 @@ const ProductForm = () => {
         const init = async () => {
             try {
                 const [brandsRes, categoriesRes] = await Promise.all([
-                    api.get('/brands/'),
-                    api.get('/categories/')
+                    api.get('brands/'),
+                    api.get('categories/')
                 ]);
                 setBrands(brandsRes.data);
                 setCategories(categoriesRes.data);
 
                 if (isEdit) {
-                    const productRes = await api.get(`/products/${slug}/`);
+                    const productRes = await api.get(`products/${slug}/`);
                     const p = productRes.data;
                     setFormData({
                         name: p.name,
@@ -115,14 +115,14 @@ const ProductForm = () => {
 
         try {
             if (isEdit) {
-                await api.patch(`/products/${slug}/`, data, {
+                await api.patch(`products/${slug}/`, data, {
                     headers: {
                         'Authorization': `Token ${token}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 });
             } else {
-                await api.post('/products/', data, {
+                await api.post('products/', data, {
                     headers: {
                         'Authorization': `Token ${token}`,
                         'Content-Type': 'multipart/form-data'

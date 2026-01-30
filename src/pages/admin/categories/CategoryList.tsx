@@ -16,7 +16,7 @@ const CategoryList = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await api.get('/categories/');
+            const response = await api.get('categories/');
             setCategories(response.data);
         } catch (error) {
             console.error("Failed to fetch categories", error);
@@ -28,7 +28,7 @@ const CategoryList = () => {
     const handleDelete = async (id: number) => {
         if (!window.confirm("Are you sure you want to delete this category?")) return;
         try {
-            await api.delete(`/categories/${id}/`, {
+            await api.delete(`categories/${id}/`, {
                 headers: { Authorization: `Token ${token}` }
             });
             setCategories(categories.filter(c => c.id !== id));

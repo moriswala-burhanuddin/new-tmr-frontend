@@ -47,8 +47,8 @@ const LeadsList = () => {
             // Assuming we use the same user for permissions, but separate endpoints
             // We'll verify this works with the backend permissions
             const [contactRes, wholesaleRes] = await Promise.all([
-                api.get('/leads/contact/', { headers: { Authorization: `Token ${token}` } }),
-                api.get('/leads/wholesale/', { headers: { Authorization: `Token ${token}` } })
+                api.get('leads/contact/', { headers: { Authorization: `Token ${token}` } }),
+                api.get('leads/wholesale/', { headers: { Authorization: `Token ${token}` } })
             ]);
             setContacts(contactRes.data);
             setWholesales(wholesaleRes.data);
@@ -61,7 +61,7 @@ const LeadsList = () => {
 
     const toggleStatus = async (type: 'contact' | 'wholesale', id: number, currentStatus: boolean) => {
         try {
-            await api.patch(`/leads/${type}/${id}/`, { is_resolved: !currentStatus }, {
+            await api.patch(`leads/${type}/${id}/`, { is_resolved: !currentStatus }, {
                 headers: { Authorization: `Token ${token}` }
             });
             // Optimistic update

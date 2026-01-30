@@ -21,8 +21,8 @@ const BrandPage = () => {
                 // In a real app, we'd have a specific endpoint or filter.
                 // For now, fetching brand details and filtering products.
                 // Assuming we have an endpoint /brands/:id/
-                const brandRes = await api.get(`/brands/${id}/`);
-                const productsRes = await api.get(`/products/?brand=${id}`);
+                const brandRes = await api.get(`brands/${id}/`);
+                const productsRes = await api.get(`products/?brand=${id}`);
 
                 setBrand({
                     ...brandRes.data,

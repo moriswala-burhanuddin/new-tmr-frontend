@@ -17,7 +17,7 @@ const BrandList = () => {
 
     const fetchBrands = async () => {
         try {
-            const response = await api.get('/brands/');
+            const response = await api.get('brands/');
             setBrands(response.data);
         } catch (error) {
             console.error("Failed to fetch brands", error);
@@ -29,7 +29,7 @@ const BrandList = () => {
     const handleDelete = async (id: number) => {
         if (!window.confirm("Are you sure you want to delete this brand?")) return;
         try {
-            await api.delete(`/brands/${id}/`, {
+            await api.delete(`brands/${id}/`, {
                 headers: { Authorization: `Token ${token}` }
             });
             setBrands(brands.filter(b => b.id !== id));

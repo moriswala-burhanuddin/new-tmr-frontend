@@ -28,7 +28,7 @@ const BrandForm = () => {
 
     const fetchBrand = async () => {
         try {
-            const response = await api.get(`/brands/${id}/`);
+            const response = await api.get(`brands/${id}/`);
             const { name, slug, logo } = response.data;
             setFormData(prev => ({ ...prev, name, slug: slug || '' })); // Ensure slug is handled if API returns it
             if (logo) setLogoPreview(logo);
@@ -62,14 +62,14 @@ const BrandForm = () => {
 
         try {
             if (isEdit) {
-                await api.patch(`/brands/${id}/`, data, {
+                await api.patch(`brands/${id}/`, data, {
                     headers: {
                         'Authorization': `Token ${token}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 });
             } else {
-                await api.post('/brands/', data, {
+                await api.post('brands/', data, {
                     headers: {
                         'Authorization': `Token ${token}`,
                         'Content-Type': 'multipart/form-data'

@@ -25,9 +25,9 @@ const ProductList = () => {
     const fetchData = async () => {
         try {
             const [productsRes, brandsRes, categoriesRes] = await Promise.all([
-                api.get('/products/'),
-                api.get('/brands/'),
-                api.get('/categories/')
+                api.get('products/'),
+                api.get('brands/'),
+                api.get('categories/')
             ]);
             setProducts(productsRes.data);
             setBrands(brandsRes.data);
@@ -42,7 +42,7 @@ const ProductList = () => {
     const handleDelete = async (slug: string) => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
         try {
-            await api.delete(`/products/${slug}/`, {
+            await api.delete(`products/${slug}/`, {
                 headers: { Authorization: `Token ${token}` }
             });
             setProducts(products.filter(p => p.slug !== slug));

@@ -31,7 +31,7 @@ const PageForm = () => {
 
     const fetchPageData = async () => {
         try {
-            const response = await api.get(`/pages/${type}/`);
+            const response = await api.get(`pages/${type}/`);
             setFormData(response.data || {});
 
             // Set previews for existing images
@@ -92,7 +92,7 @@ const PageForm = () => {
         });
 
         try {
-            await api.patch(`/pages/${type}/`, data, {
+            await api.patch(`pages/${type}/`, data, {
                 headers: {
                     'Authorization': `Token ${token}`,
                     'Content-Type': 'multipart/form-data'

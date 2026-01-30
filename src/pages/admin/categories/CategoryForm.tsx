@@ -26,7 +26,7 @@ const CategoryForm = () => {
 
     const fetchCategory = async () => {
         try {
-            const response = await api.get(`/categories/${id}/`);
+            const response = await api.get(`categories/${id}/`);
             setFormData({ name: response.data.name, slug: response.data.slug });
         } catch (err) {
             console.error("Failed to fetch category", err);
@@ -45,11 +45,11 @@ const CategoryForm = () => {
 
         try {
             if (isEdit) {
-                await api.patch(`/categories/${id}/`, formData, {
+                await api.patch(`categories/${id}/`, formData, {
                     headers: { 'Authorization': `Token ${token}` }
                 });
             } else {
-                await api.post('/categories/', formData, {
+                await api.post('categories/', formData, {
                     headers: { 'Authorization': `Token ${token}` }
                 });
             }

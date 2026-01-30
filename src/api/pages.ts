@@ -31,7 +31,7 @@ export interface AboutPageContent {
 
 export const getHomePageContent = async (): Promise<HomePageContent> => {
     try {
-        const response = await api.get('/pages/home/');
+        const response = await api.get('pages/home/');
         return response.data;
     } catch (error) {
         console.error('Error fetching home page content:', error);
@@ -41,7 +41,7 @@ export const getHomePageContent = async (): Promise<HomePageContent> => {
 
 export const getAboutPageContent = async (): Promise<AboutPageContent> => {
     try {
-        const response = await api.get('/pages/about/');
+        const response = await api.get('pages/about/');
         return response.data;
     } catch (error) {
         console.error('Error fetching about page content:', error);
@@ -73,7 +73,7 @@ export interface WholesalePageContent {
 
 export const getContactPageContent = async (): Promise<ContactPageContent> => {
     try {
-        const response = await api.get('/pages/contact/');
+        const response = await api.get('pages/contact/');
         return response.data;
     } catch (error) {
         console.error('Error fetching contact page content:', error);
@@ -83,7 +83,7 @@ export const getContactPageContent = async (): Promise<ContactPageContent> => {
 
 export const getWholesalePageContent = async (): Promise<WholesalePageContent> => {
     try {
-        const response = await api.get('/pages/wholesale/');
+        const response = await api.get('pages/wholesale/');
         return response.data;
     } catch (error) {
         console.error('Error fetching wholesale page content:', error);
