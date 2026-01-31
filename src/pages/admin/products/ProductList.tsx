@@ -110,7 +110,7 @@ const ProductList = () => {
                 </select>
             </div>
 
-            <div className="bg-[#1A1A1A] border border-[#333] overflow-hidden">
+            <div className="bg-[#1A1A1A] border border-[#333] overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-[#111] border-b border-[#333]">

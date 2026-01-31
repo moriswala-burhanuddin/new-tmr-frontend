@@ -24,8 +24,8 @@ const Products = () => {
         const brandParam = searchParams.get('brand');
         const categoryParam = searchParams.get('category');
 
-        if (brandParam) setSelectedBrand(brandParam);
-        if (categoryParam) setSelectedCategory(categoryParam);
+        if (brandParam) setSelectedBrand(brandParam.toLowerCase());
+        if (categoryParam) setSelectedCategory(categoryParam.toLowerCase());
     }, [location.search]);
 
     // Initial Data Fetch
