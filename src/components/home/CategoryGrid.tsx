@@ -11,14 +11,14 @@ const CategoryGrid = () => {
         {
             id: 2,
             title: 'HAND TOOLS',
-            image: '/assets/images/category-hand-tools.png',
+            image: '/assets/images/hand-tools.png',
             link: '/products?category=hand-tools'
         },
         {
             id: 3,
-            title: 'FASTENERS',
-            image: '/assets/images/category-fasteners.png',
-            link: '/products?category=fasteners'
+            title: 'LIFTING EQUIPMENT',
+            image: '/assets/images/lifting-eq.png',
+            link: '/products?category=lifting-equipment'
         }
     ];
 
