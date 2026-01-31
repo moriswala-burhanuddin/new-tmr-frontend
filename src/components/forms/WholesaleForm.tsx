@@ -4,12 +4,14 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { createWholesaleInquiry, type WholesaleData } from '../../api/leads';
 import { getBrands, getProducts, type Brand, type Product } from '../../api/products';
-import { Send, User, Building2, Mail, Phone, Package, Tag, FileText } from 'lucide-react';
+import { Send, User, Building2, Mail, Phone, FileText } from 'lucide-react';
 
 const WholesaleForm = () => {
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<WholesaleData>();
     const [brands, setBrands] = useState<Brand[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
+    const [selectedBrands, setSelectedBrands] = useState<number[]>([]);
+    const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,9 +28,15 @@ const WholesaleForm = () => {
 
     const onSubmit = async (data: WholesaleData) => {
         try {
-            await createWholesaleInquiry(data);
+            await createWholesaleInquiry({
+                ...data,
+                brand_ids: selectedBrands,
+                product_ids: selectedProducts
+            });
             toast.success('Wholesale inquiry sent! A representative will contact you.');
             reset();
+            setSelectedBrands([]);
+            setSelectedProducts([]);
         } catch (error) {
             toast.error('Failed to send inquiry. Please try again.');
             console.error(error);
@@ -101,37 +109,76 @@ const WholesaleForm = () => {
                     {errors.contact_number && <p className="text-[#C41E3A] text-xs ml-1 font-bold">{errors.contact_number.message}</p>}
                 </div>
 
-                {/* Brand Interested */}
-                <div className="space-y-2">
-                    <label className={labelClasses}>Brand Interest (Optional)</label>
-                    <div className="relative group">
-                        <Tag className={iconClasses} />
-                        <select
-                            {...register('brand_interested')}
-                            className={`${inputClasses} appearance-none`}
-                        >
-                            <option value="" className="bg-[#121212]">Select Brand</option>
-                            {brands.map(brand => (
-                                <option key={brand.id} value={brand.id} className="bg-[#121212]">{brand.name}</option>
-                            ))}
-                        </select>
+                {/* Brand Selection Grid */}
+                <div className="space-y-4 md:col-span-2">
+                    <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                        <label className={labelClasses}>Brands of Interest</label>
+                        <span className="text-[10px] text-[#C41E3A] font-bold uppercase tracking-widest bg-[#C41E3A]/10 px-2 py-0.5 rounded-full">
+                            {selectedBrands.length} Selected
+                        </span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                        {brands.map(brand => (
+                            <button
+                                key={brand.id}
+                                type="button"
+                                onClick={() => {
+                                    setSelectedBrands(prev =>
+                                        prev.includes(brand.id)
+                                            ? prev.filter(id => id !== brand.id)
+                                            : [...prev, brand.id]
+                                    );
+                                }}
+                                className={`flex items-center gap-2 p-2 border transition-all text-left ${selectedBrands.includes(brand.id)
+                                    ? "bg-[#C41E3A]/10 border-[#C41E3A] text-white"
+                                    : "bg-[#1A1A1A] border-[#333] text-[#888] hover:border-[#444]"
+                                    }`}
+                            >
+                                <div className={`w-3 h-3 border flex items-center justify-center ${selectedBrands.includes(brand.id) ? "bg-[#C41E3A] border-[#C41E3A]" : "border-[#444]"
+                                    }`}>
+                                    {selectedBrands.includes(brand.id) && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                                </div>
+                                <span className="text-[10px] font-bold uppercase truncate">{brand.name}</span>
+                            </button>
+                        ))}
                     </div>
                 </div>
 
-                {/* Product Interested */}
-                <div className="space-y-2">
-                    <label className={labelClasses}>Specific Product (Optional)</label>
-                    <div className="relative group">
-                        <Package className={iconClasses} />
-                        <select
-                            {...register('product_interested')}
-                            className={`${inputClasses} appearance-none`}
-                        >
-                            <option value="" className="bg-[#121212]">Select Product</option>
-                            {products.map(product => (
-                                <option key={product.id} value={product.id} className="bg-[#121212]">{product.name}</option>
-                            ))}
-                        </select>
+                {/* Product Selection Grid */}
+                <div className="space-y-4 md:col-span-2">
+                    <div className="flex items-center justify-between border-b border-[#333] pb-2">
+                        <label className={labelClasses}>Products of Interest</label>
+                        <span className="text-[10px] text-[#C41E3A] font-bold uppercase tracking-widest bg-[#C41E3A]/10 px-2 py-0.5 rounded-full">
+                            {selectedProducts.length} Selected
+                        </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                        {products.map(product => (
+                            <button
+                                key={product.id}
+                                type="button"
+                                onClick={() => {
+                                    setSelectedProducts(prev =>
+                                        prev.includes(product.id)
+                                            ? prev.filter(id => id !== product.id)
+                                            : [...prev, product.id]
+                                    );
+                                }}
+                                className={`flex items-center gap-2 p-2 border transition-all text-left ${selectedProducts.includes(product.id)
+                                    ? "bg-[#C41E3A]/10 border-[#C41E3A] text-white"
+                                    : "bg-[#1A1A1A] border-[#333] text-[#888] hover:border-[#444]"
+                                    }`}
+                            >
+                                <div className={`w-3 h-3 border flex items-center justify-center ${selectedProducts.includes(product.id) ? "bg-[#C41E3A] border-[#C41E3A]" : "border-[#444]"
+                                    }`}>
+                                    {selectedProducts.includes(product.id) && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="text-[10px] font-bold uppercase truncate">{product.name}</div>
+                                    <div className="text-[8px] text-[#666] uppercase">{product.category_details?.name}</div>
+                                </div>
+                            </button>
+                        ))}
                     </div>
                 </div>
             </div>

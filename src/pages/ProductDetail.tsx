@@ -61,6 +61,7 @@ const ProductDetail = () => {
             <Seo
                 title={product.meta_title || product.name || "Product Detail"}
                 description={product.meta_description || product.specifications || `Buy ${product.name} - High quality industrial product.`}
+                keywords={product.meta_keywords}
                 image={product.og_image ? fixImageUrl(product.og_image) : undefined}
                 url={window.location.href}
             />
@@ -97,6 +98,22 @@ const ProductDetail = () => {
                                 )}
                             </motion.div>
                         </div>
+
+                        {/* Brand Logos Strip */}
+                        {product.brands && product.brands.length > 0 && (
+                            <div className="mt-8 flex flex-wrap gap-4 items-center">
+                                {product.brands.map(brand => brand.logo && (
+                                    <div key={brand.id} className="bg-white p-2 rounded-sm shadow-lg border border-[#333] hover:border-[#C41E3A] transition-all group/logo">
+                                        <img
+                                            src={fixImageUrl(brand.logo)}
+                                            alt={brand.name}
+                                            title={brand.name}
+                                            className="h-8 md:h-10 w-auto object-contain grayscale group-hover/logo:grayscale-0 transition-all"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Content Section (lg:col-span-5) */}
@@ -107,9 +124,22 @@ const ProductDetail = () => {
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
                             <div className="mb-6">
-                                <span className="text-[#C41E3A] font-bold tracking-widest uppercase text-sm font-display mb-2 block">
-                                    {(typeof product.brand === 'object' ? product.brand?.name : null) || 'TMR Industrial'}
-                                </span>
+                                <div className="space-y-1 mb-2">
+                                    <span className="text-[#C41E3A] font-bold tracking-widest uppercase text-sm font-display block">
+                                        {product.brands && product.brands.length > 0
+                                            ? product.brands.map(b => b.name).join(' / ')
+                                            : 'TMR Industrial'}
+                                    </span>
+                                    {product.brands && product.brands.length > 0 && (
+                                        <p className="text-[#888] text-[10px] uppercase tracking-widest italic">
+                                            Available in: {product.brands.map((b, i) => (
+                                                <span key={b.id}>
+                                                    {b.name}{i < product.brands.length - 2 ? ', ' : i === product.brands.length - 2 ? ' and ' : ''}
+                                                </span>
+                                            ))}
+                                        </p>
+                                    )}
+                                </div>
                                 <h1 className="text-4xl md:text-5xl font-bold text-white uppercase tracking-tighter font-display leading-none mb-4">
                                     {product.name}
                                 </h1>

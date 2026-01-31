@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Seo from '../components/common/Seo';
 import { getAboutPageContent, type AboutPageContent } from '../api/pages';
+import { fixImageUrl } from '../lib/utils';
 
 // AboutPageData interface removed as we use AboutPageContent from api/pages
 
@@ -34,6 +35,7 @@ const About = () => {
             <Seo
                 title={data?.seo_title || data?.hero_title || "About Us"}
                 description={data?.seo_description || "Learn more about our company and mission."}
+                keywords={data?.seo_keywords}
             />
 
             {/* Hero Section */}
@@ -41,12 +43,12 @@ const About = () => {
                 {/* Background Image / Overlay */}
                 <div className="absolute inset-0 z-0">
                     {data?.hero_image ? (
-                        <img src={data.hero_image} alt="About Us" className="w-full h-full object-cover opacity-30 grayscale" />
+                        <img src={fixImageUrl(data.hero_image)} alt="About Us" className="w-full h-full object-cover opacity-30 grayscale" />
                     ) : (
                         <div className="w-full h-full bg-[#1A1A1A]"></div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#121212] to-transparent"></div>
-                    <div className="absolute inset-0 bg-[url('/assets/images/mesh-pattern.png')] opcode-10"></div>
+                    <div className="absolute inset-0 bg-[url('/assets/images/mesh-pattern.png')] opacity-10"></div>
                 </div>
 
                 <div className="relative z-10 text-center px-4">
@@ -58,14 +60,24 @@ const About = () => {
                     >
                         {data?.hero_title || "Heavy Duty Heritage"}
                     </motion.h1>
+                    {data?.hero_subtitle && (
+                        <motion.p
+                            className="text-white text-xl uppercase tracking-widest font-semibold mb-6 block"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            {data.hero_subtitle}
+                        </motion.p>
+                    )}
                     <motion.div
                         className="flex items-center justify-center gap-4"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
+                        transition={{ delay: 0.5 }}
                     >
                         <div className="w-12 h-1 bg-[#C41E3A]"></div>
-                        <span className="text-white uppercase tracking-widest font-semibold">Since 2024</span>
+                        <span className="text-white uppercase tracking-widest font-semibold text-sm">Since 2024</span>
                         <div className="w-12 h-1 bg-[#C41E3A]"></div>
                     </motion.div>
                 </div>
@@ -117,14 +129,23 @@ const About = () => {
                             <div className="absolute bottom-2 left-2 w-2 h-2 bg-[#121212] rounded-full border border-[#444]"></div>
                             <div className="absolute bottom-2 right-2 w-2 h-2 bg-[#121212] rounded-full border border-[#444]"></div>
 
-                            <h3 className="text-4xl font-bold text-[#C41E3A] mb-1 font-display">100+</h3>
+                            <h3 className="text-4xl font-bold text-[#C41E3A] mb-1 font-display">{data?.clients_served_count || "100+"}</h3>
                             <p className="text-white uppercase text-sm tracking-wider font-semibold">Clients Served</p>
                         </div>
 
                         <div className="bg-[#1A1A1A] p-8 border border-[#333] relative overflow-hidden group hover:border-[#C41E3A] transition-colors">
                             <h3 className="text-4xl font-bold text-white mb-1 font-display">24/7</h3>
-                            <p className="text-[#AAAAAA] uppercase text-sm tracking-wider font-semibold">Expert Support</p>
+                            <p className="text-[#AAAAAA] uppercase text-sm tracking-wider font-semibold">{data?.expert_support_text || "Expert Support"}</p>
                         </div>
+
+                        {data?.html_content && (
+                            <div className="bg-[#1A1A1A] p-8 border border-[#C41E3A] border-l-4">
+                                <div
+                                    className="text-white text-sm font-sans italic"
+                                    dangerouslySetInnerHTML={{ __html: data.html_content }}
+                                />
+                            </div>
+                        )}
 
                         <div className="bg-[#C41E3A] p-8 text-white text-center">
                             <h4 className="font-bold uppercase tracking-widest text-lg mb-4 font-display">Ready to Work?</h4>

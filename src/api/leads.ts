@@ -15,8 +15,8 @@ export interface WholesaleData {
     business_name: string;
     email: string;
     contact_number: string;
-    product_interested?: number;
-    brand_interested?: number;
+    product_ids?: number[];
+    brand_ids?: number[];
     details: string;
 }
 

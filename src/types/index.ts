@@ -22,10 +22,11 @@ export interface Product {
     image: string | null;
     is_featured: boolean;
     specifications: string;
-    brand: Brand | number;
+    brands: Brand[];
     category: Category | number | null;
     meta_title?: string;
     meta_description?: string;
+    meta_keywords?: string;
     og_image?: string;
 }
 
@@ -33,6 +34,12 @@ export interface Brand {
     id: number;
     name: string;
     logo: string | null;
+    description: string;
+    hero_title: string;
+    hero_subtitle: string;
+    hero_image: string | null;
+    content: string;
+    html_content: string;
 }
 
 export interface Category {

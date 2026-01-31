@@ -5,14 +5,22 @@ export interface Brand {
     name: string;
     logo: string | null;
     slug: string;
+    description: string;
+    hero_title: string;
+    hero_subtitle: string;
+    hero_image: string | null;
+    content: string;
+    html_content: string;
+    created_at: string;
 }
 
 export interface Product {
     id: number;
     name: string;
     slug: string;
-    category: number;
-    brand: number;
+    category: any;
+    category_details?: { id: number; name: string; slug: string };
+    brands: Brand[];
     image: string | null;
     is_featured: boolean;
     specifications: string;

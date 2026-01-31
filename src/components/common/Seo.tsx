@@ -4,11 +4,12 @@ import { Helmet } from 'react-helmet-async';
 interface SeoProps {
     title?: string;
     description?: string;
+    keywords?: string;
     url?: string;
     image?: string;
 }
 
-const Seo = ({ title, description, url, image }: SeoProps) => {
+const Seo = ({ title, description, keywords, url, image }: SeoProps) => {
     const siteTitle = 'TMR Project';
     const finalTitle = title ? `${title} | ${siteTitle}` : siteTitle;
     const finalDescription = description || "High-quality industrial equipment and hardware products.";
@@ -30,12 +31,24 @@ const Seo = ({ title, description, url, image }: SeoProps) => {
             }
             metaDesc.setAttribute('content', finalDescription);
         }
-    }, [finalTitle, finalDescription]);
+
+        // Update Keywords
+        if (keywords) {
+            let metaKeywords = document.querySelector('meta[name="keywords"]');
+            if (!metaKeywords) {
+                metaKeywords = document.createElement('meta');
+                metaKeywords.setAttribute('name', 'keywords');
+                document.head.appendChild(metaKeywords);
+            }
+            metaKeywords.setAttribute('content', keywords);
+        }
+    }, [finalTitle, finalDescription, keywords]);
 
     return (
         <Helmet>
             <title>{finalTitle}</title>
             <meta name="description" content={finalDescription} />
+            {keywords && <meta name="keywords" content={keywords} />}
 
             {/* Open Graph / Facebook */}
             <meta property="og:type" content="website" />

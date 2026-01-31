@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CTASection = () => {
     return (
@@ -28,22 +29,22 @@ const CTASection = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <button className="w-full sm:w-auto px-10 py-4 bg-[#C41E3A] hover:bg-white hover:text-[#C41E3A] text-white font-bold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group uppercase tracking-widest border-2 border-[#C41E3A] font-display">
+                        <Link to="/contact" className="w-full sm:w-auto px-10 py-4 bg-[#C41E3A] hover:bg-white hover:text-[#C41E3A] text-white font-bold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group uppercase tracking-widest border-2 border-[#C41E3A] font-display">
                             Request Quote
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                        </button>
+                        </Link>
 
-                        <button className="w-full sm:w-auto px-10 py-4 bg-transparent hover:bg-white/10 text-white font-bold backdrop-blur-sm border-2 border-white/30 hover:border-white transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-display">
+                        <Link to="/contact" className="w-full sm:w-auto px-10 py-4 bg-transparent hover:bg-white/10 text-white font-bold backdrop-blur-sm border-2 border-white/30 hover:border-white transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-display">
                             <Mail className="w-5 h-5" />
                             Contact Sales
-                        </button>
+                        </Link>
 
-                        <button className="w-full sm:w-auto px-10 py-4 bg-transparent hover:bg-[#C41E3A] text-white font-bold border-2 border-[#444] hover:border-[#C41E3A] transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-display">
+                        <Link to="/contact" className="w-full sm:w-auto px-10 py-4 bg-transparent hover:bg-[#C41E3A] text-white font-bold border-2 border-[#444] hover:border-[#C41E3A] transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-display">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             Book a Call
-                        </button>
+                        </Link>
                     </div>
 
                     <div className="mt-12 flex justify-center gap-8 text-[#666] text-sm font-medium uppercase tracking-wide">

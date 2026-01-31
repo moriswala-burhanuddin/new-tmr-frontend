@@ -58,7 +58,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
                     {/* Content Section */}
                     <div className="p-6 flex-1 flex flex-col bg-[#1A1A1A]">
                         {/* Category Tag */}
-                        <div className="mb-3">
+                        <div className="mb-3 flex flex-col gap-1">
+                            {product.brands && product.brands.length > 0 && (
+                                <span className="text-[#888] text-[10px] uppercase tracking-widest font-bold">
+                                    {product.brands.map(b => b.name).join(' / ')}
+                                </span>
+                            )}
                             <span className="text-[#C41E3A] text-xs font-bold uppercase tracking-[0.2em] font-display">
                                 {(typeof product.category === 'object' ? product.category?.name : null) || 'Industrial Gear'}
                             </span>

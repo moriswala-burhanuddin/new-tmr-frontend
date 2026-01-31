@@ -33,12 +33,14 @@ const Home = () => {
             <Seo
                 title={content?.seo_title || "Home"}
                 description={content?.seo_description || "Welcome to TMR Project, your source for premium hardware products."}
+                keywords={content?.seo_keywords}
             />
             <Hero />
             <CategoryGrid />
             {/* Display static BrandShowcase grid instead of ticker */}
             <BrandShowcase />
             <AllProducts />
+
             <CTASection />
             <SocialProof links={socialLinks} />
         </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
+import { Link } from 'react-router-dom';
 import { fixImageUrl } from '../../lib/utils';
 import type { HomePageData } from '../../types';
 
@@ -53,12 +54,12 @@ const Hero = () => {
                             <span className="text-primary">Up Your Jobsite.</span>
                         </h1>
                         <div className="flex gap-4 mt-8">
-                            <button className="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-sm transition-colors uppercase tracking-wider text-sm shadow-lg font-display">
+                            <Link to="/products" className="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-sm transition-colors uppercase tracking-wider text-sm shadow-lg font-display">
                                 Shop Now
-                            </button>
-                            <button className="bg-transparent border border-gray-400 hover:border-white text-white font-bold py-3 px-8 rounded-sm transition-colors uppercase tracking-wider text-sm font-display">
+                            </Link>
+                            <Link to="/contact" className="bg-transparent border border-gray-400 hover:border-white text-white font-bold py-3 px-8 rounded-sm transition-colors uppercase tracking-wider text-sm font-display">
                                 Request Quote
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -105,12 +106,12 @@ const Hero = () => {
                             </p>
                         )}
                         <div className="flex flex-wrap gap-4 mt-10">
-                            <button className="bg-[#C41E3A] hover:bg-[#A01A2E] text-white font-bold py-4 px-10 rounded-sm transition-colors uppercase tracking-widest text-sm shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-display border border-[#C41E3A]">
+                            <Link to="/products" className="bg-[#C41E3A] hover:bg-[#A01A2E] text-white font-bold py-4 px-10 rounded-sm transition-colors uppercase tracking-widest text-sm shadow-xl hover:shadow-2xl transform hover:-translate-y-1 font-display border border-[#C41E3A] whitespace-nowrap">
                                 Shop Now
-                            </button>
-                            <button className="bg-transparent border border-[#444] hover:border-white text-white font-bold py-4 px-10 rounded-sm transition-colors uppercase tracking-widest text-sm hover:bg-white/5 font-display">
+                            </Link>
+                            <Link to="/contact" className="bg-transparent border border-[#444] hover:border-white text-white font-bold py-4 px-10 rounded-sm transition-colors uppercase tracking-widest text-sm hover:bg-white/5 font-display whitespace-nowrap">
                                 Request Quote
-                            </button>
+                            </Link>
                         </div>
                     </div>
 

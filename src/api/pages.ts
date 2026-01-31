@@ -3,6 +3,7 @@ import api from '../lib/axios';
 export interface HomePageContent {
     seo_title: string;
     seo_description: string;
+    seo_keywords: string;
     hero_title: string;
     hero_subtitle: string;
     hero_image: string;
@@ -18,15 +19,23 @@ export interface HomePageContent {
     youtube_url: string;
     about_section_title: string;
     about_section_content: string;
+    content: string;
+    html_content: string;
+    clients_served_count: string;
+    expert_support_text: string;
 }
 
 export interface AboutPageContent {
     seo_title: string;
     seo_description: string;
+    seo_keywords: string;
     hero_title: string;
     hero_subtitle: string;
     hero_image: string;
     content: string;
+    html_content: string;
+    clients_served_count: string;
+    expert_support_text: string;
 }
 
 export const getHomePageContent = async (): Promise<HomePageContent> => {
@@ -52,6 +61,7 @@ export const getAboutPageContent = async (): Promise<AboutPageContent> => {
 export interface ContactPageContent {
     seo_title: string;
     seo_description: string;
+    seo_keywords: string;
     hero_title: string;
     hero_subtitle: string;
     hero_image: string;
@@ -65,10 +75,23 @@ export interface ContactPageContent {
 export interface WholesalePageContent {
     seo_title: string;
     seo_description: string;
+    seo_keywords: string;
     hero_title: string;
     hero_subtitle: string;
     hero_image: string;
     content: string;
+    html_content: string;
+}
+
+export interface BrandPageContent {
+    seo_title: string;
+    seo_description: string;
+    seo_keywords: string;
+    hero_title: string;
+    hero_subtitle: string;
+    hero_image: string;
+    content: string;
+    html_content: string;
 }
 
 export const getContactPageContent = async (): Promise<ContactPageContent> => {
@@ -88,5 +111,15 @@ export const getWholesalePageContent = async (): Promise<WholesalePageContent> =
     } catch (error) {
         console.error('Error fetching wholesale page content:', error);
         return {} as WholesalePageContent;
+    }
+};
+
+export const getBrandPageContent = async (): Promise<BrandPageContent> => {
+    try {
+        const response = await api.get('pages/brand/');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching brand page content:', error);
+        return {} as BrandPageContent;
     }
 };

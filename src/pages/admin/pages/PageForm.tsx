@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import api from '../../../lib/axios';
 import { Save, ArrowLeft, Upload } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { fixImageUrl } from '../../../lib/utils';
 
@@ -98,10 +99,11 @@ const PageForm = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            alert("Page saved successfully!");
+            toast.success("Page saved successfully!");
             // navigate('/admin/pages'); // Optional: stay on page to verify
         } catch (err) {
             console.error("Failed to save page", err);
+            toast.error("Failed to save page changes.");
             setError("Failed to save page changes.");
         } finally {
             setLoading(false);
@@ -178,6 +180,10 @@ const PageForm = () => {
                             <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Meta Description</label>
                             <textarea name="seo_description" rows={3} value={formData.seo_description || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A]" />
                         </div>
+                        <div>
+                            <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Meta Keywords</label>
+                            <textarea name="seo_keywords" rows={2} value={formData.seo_keywords || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A]" placeholder="keyword1, keyword2, keyword3" />
+                        </div>
                     </div>
                 </div>
 
@@ -205,8 +211,12 @@ const PageForm = () => {
                 <div className="space-y-4">
                     <h3 className="text-white font-bold uppercase border-b border-[#333] pb-2">Main Content</h3>
                     <div>
-                        <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">HTML Content / Detail Text</label>
-                        <textarea name="content" rows={10} value={formData.content || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A]" />
+                        <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Main Content Text</label>
+                        <textarea name="content" rows={6} value={formData.content || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] mb-4" />
+                    </div>
+                    <div>
+                        <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">HTML / Detail Text (Italian Script Style)</label>
+                        <textarea name="html_content" rows={6} value={formData.html_content || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] font-mono text-xs" />
                     </div>
                 </div>
 

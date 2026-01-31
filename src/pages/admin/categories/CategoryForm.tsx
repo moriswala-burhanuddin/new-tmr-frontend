@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import api from '../../../lib/axios';
 import { Save, ArrowLeft } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
 const CategoryForm = () => {
@@ -53,9 +54,11 @@ const CategoryForm = () => {
                     headers: { 'Authorization': `Token ${token}` }
                 });
             }
+            toast.success(`Category ${isEdit ? 'updated' : 'created'} successfully!`);
             navigate('/admin/categories');
         } catch (err) {
             console.error("Failed to save category", err);
+            toast.error("Failed to save category.");
             setError("Failed to save category. Please try again.");
         } finally {
             setLoading(false);

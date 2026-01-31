@@ -39,6 +39,7 @@ const WholesalePage = () => {
             <Seo
                 title={data?.seo_title || "Wholesale & Bulk Orders"}
                 description={data?.seo_description || "B2B solutions and wholesale pricing for industrial equipment."}
+                keywords={data?.seo_keywords}
             />
 
             {/* Hero Section */}

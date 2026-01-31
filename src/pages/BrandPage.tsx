@@ -53,23 +53,69 @@ const BrandPage = () => {
     return (
         <div className="min-h-screen bg-[#121212] pt-20">
             <Seo
-                title={`${brand.name} Products`}
-                description={`Browse our selection of ${brand.name} products.`}
-                image={brand.logo ? fixImageUrl(brand.logo) : undefined}
+                title={brand.hero_title || `${brand.name} | TMR Project`}
+                description={brand.hero_subtitle || `Explore high-performance solutions from ${brand.name}.`}
+                image={brand.hero_image ? fixImageUrl(brand.hero_image) : (brand.logo ? fixImageUrl(brand.logo) : undefined)}
             />
 
-            {/* Brand Header */}
-            <div className="bg-[#1A1A1A] border-b border-[#333] py-16">
-                <div className="max-w-7xl mx-auto px-6 flex flex-col items-center text-center">
+            {/* Brand Hero */}
+            <div className="relative overflow-hidden border-b-[5px] border-[#C41E3A]">
+                <div className="absolute inset-0 z-0">
+                    {brand.hero_image ? (
+                        <img src={fixImageUrl(brand.hero_image)} alt={brand.name} className="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700" />
+                    ) : (
+                        <div className="w-full h-full bg-[#1A1A1A]"></div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent"></div>
+                </div>
+
+                <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 flex flex-col items-center text-center">
                     {brand.logo && (
-                        <div className="w-32 h-32 bg-white rounded-full p-4 mb-6 flex items-center justify-center border-4 border-[#C41E3A]">
-                            <img src={brand.logo} alt={brand.name} className="max-w-full max-h-full object-contain" />
+                        <div className="w-24 h-24 bg-white rounded-full p-4 mb-8 flex items-center justify-center border-4 border-[#C41E3A]">
+                            <img src={fixImageUrl(brand.logo)} alt={brand.name} className="max-w-full max-h-full object-contain" />
                         </div>
                     )}
-                    <h1 className="text-5xl font-bold text-white uppercase tracking-tighter font-display mb-2">{brand.name}</h1>
-                    <div className="w-24 h-1 bg-[#C41E3A] rounded-full"></div>
+                    <h1 className="text-5xl md:text-7xl font-bold text-white uppercase tracking-tighter font-display mb-4 leading-none drop-shadow-2xl">
+                        {brand.hero_title || brand.name}
+                    </h1>
+                    {brand.hero_subtitle && (
+                        <p className="text-[#AAAAAA] text-lg uppercase tracking-[0.2em] font-bold max-w-2xl mb-8">
+                            {brand.hero_subtitle}
+                        </p>
+                    )}
+                    <div className="w-24 h-1.5 bg-[#C41E3A]"></div>
                 </div>
             </div>
+
+            {/* Brand Content Section */}
+            {(brand.content || brand.html_content) && (
+                <div className="max-w-7xl mx-auto px-6 py-20 border-b border-[#333]">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                        <div className="lg:col-span-8">
+                            {brand.content && (
+                                <div
+                                    className="prose prose-xl prose-invert text-[#AAAAAA] max-w-none mb-12"
+                                    dangerouslySetInnerHTML={{ __html: brand.content.replace(/\n/g, '<br />') }}
+                                />
+                            )}
+                            {brand.html_content && (
+                                <div
+                                    className="prose prose-lg prose-invert text-[#888888] max-w-none border-l-4 border-[#C41E3A] pl-8 italic font-sans"
+                                    dangerouslySetInnerHTML={{ __html: brand.html_content }}
+                                />
+                            )}
+                        </div>
+                        <div className="lg:col-span-4 bg-[#1A1A1A] p-8 border border-[#333] relative">
+                            <div className="absolute top-2 left-2 w-2 h-2 bg-[#121212] rounded-full border border-[#444]"></div>
+                            <div className="absolute top-2 right-2 w-2 h-2 bg-[#121212] rounded-full border border-[#444]"></div>
+                            <h3 className="text-xl font-bold text-white uppercase tracking-tighter mb-4 font-display">Authorized Dealer</h3>
+                            <p className="text-sm text-[#888] leading-relaxed">
+                                We are proud to be an authorized partner for {brand.name}, delivering their legacy of industrial performance directly to our clients.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Products Grid */}
             <div className="max-w-7xl mx-auto px-6 py-12">

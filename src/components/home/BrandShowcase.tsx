@@ -66,10 +66,7 @@ const BrandShowcase = () => {
                 <div className="space-y-32">
                     {brands.map((brand) => {
                         const brandProducts = products.filter(p => {
-                            const productBrandId = typeof p.brand === 'object' && p.brand !== null
-                                ? (p.brand as any).id
-                                : p.brand;
-                            return productBrandId === brand.id;
+                            return p.brands && p.brands.some(b => b.id === brand.id);
                         });
 
                         if (brandProducts.length === 0) return null;

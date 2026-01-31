@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import api from '../../../lib/axios';
 import { useAuth } from '../../../context/AuthContext';
 import { fixImageUrl } from '../../../lib/utils';
@@ -46,9 +47,10 @@ const ProductList = () => {
                 headers: { Authorization: `Token ${token}` }
             });
             setProducts(products.filter(p => p.slug !== slug));
+            toast.success("Product deleted successfully");
         } catch (error) {
             console.error("Failed to delete product", error);
-            alert("Failed to delete product");
+            toast.error("Failed to delete product");
         }
     };
 
@@ -56,12 +58,9 @@ const ProductList = () => {
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-        // Handle brand as object or ID
-        const brandId = typeof product.brand === 'object' && product.brand !== null
-            ? (product.brand as any).id?.toString()
-            : product.brand?.toString();
-
-        const matchesBrand = selectedBrand ? brandId === selectedBrand : true;
+        // Handle brands as array
+        const brandIds = product.brands.map(b => b.id.toString());
+        const matchesBrand = selectedBrand ? brandIds.includes(selectedBrand) : true;
 
         // Handle category as object or ID
         const categoryId = typeof product.category === 'object' && product.category !== null
@@ -138,7 +137,7 @@ const ProductList = () => {
                                     {typeof product.category === 'object' && product.category !== null ? (product.category as any).name : '-'}
                                 </td>
                                 <td className="p-4 text-[#AAAAAA]">
-                                    {typeof product.brand === 'object' && product.brand !== null ? (product.brand as any).name : '-'}
+                                    {product.brands.map(b => b.name).join(', ') || '-'}
                                 </td>
                                 <td className="p-4">
                                     {product.is_featured ? (

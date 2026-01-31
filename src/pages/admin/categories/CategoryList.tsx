@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import api from '../../../lib/axios';
 import { useAuth } from '../../../context/AuthContext';
 import type { Category } from '../../../types';
@@ -32,9 +33,10 @@ const CategoryList = () => {
                 headers: { Authorization: `Token ${token}` }
             });
             setCategories(categories.filter(c => c.id !== id));
+            toast.success("Category deleted successfully");
         } catch (error) {
             console.error("Failed to delete category", error);
-            alert("Failed to delete category");
+            toast.error("Failed to delete category");
         }
     };
 

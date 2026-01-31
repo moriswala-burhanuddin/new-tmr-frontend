@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Mail, Phone, Building2, Globe, CheckCircle, XCircle, Search } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import api from '../../../lib/axios';
 import { useAuth } from '../../../context/AuthContext';
 import type { Brand, Product } from '../../../types';
@@ -70,9 +71,10 @@ const LeadsList = () => {
             } else {
                 setWholesales(prev => prev.map(w => w.id === id ? { ...w, is_resolved: !currentStatus } : w));
             }
+            toast.success(`Inquiry marked as ${!currentStatus ? 'resolved' : 'unresolved'}`);
         } catch (error) {
             console.error("Failed to update status", error);
-            alert("Failed to update status");
+            toast.error("Failed to update status");
         }
     };
 

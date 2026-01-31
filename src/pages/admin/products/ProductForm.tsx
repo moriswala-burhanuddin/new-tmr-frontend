@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import api from '../../../lib/axios';
 import { Save, ArrowLeft, Upload, X } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { fixImageUrl } from '../../../lib/utils';
 import type { Brand, Category } from '../../../types';
@@ -18,12 +19,13 @@ const ProductForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         category: '',
-        brand: '',
+        brands: [] as number[],
         specifications: '',
         is_featured: false,
         image: null as File | null,
         meta_title: '',
         meta_description: '',
+        meta_keywords: '',
         og_image: null as File | null
     });
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -47,12 +49,13 @@ const ProductForm = () => {
                     setFormData({
                         name: p.name,
                         category: p.category?.id?.toString() || '',
-                        brand: p.brand?.id?.toString() || '',
+                        brands: p.brands ? p.brands.map((b: any) => b.id) : [],
                         specifications: p.specifications || '',
                         is_featured: p.is_featured,
                         image: null,
                         meta_title: p.meta_title || '',
                         meta_description: p.meta_description || '',
+                        meta_keywords: p.meta_keywords || '',
                         og_image: null
                     });
                     if (p.image) setImagePreview(fixImageUrl(p.image) || null);
@@ -99,12 +102,17 @@ const ProductForm = () => {
 
         // Backend expects primary keys for writing
         if (formData.category) data.append('category_id', formData.category);
-        if (formData.brand) data.append('brand_id', formData.brand);
+
+        // Append each brand ID separately for DRF to parse as a list
+        formData.brands.forEach(id => {
+            data.append('brand_ids', id.toString());
+        });
 
         data.append('specifications', formData.specifications);
         data.append('is_featured', formData.is_featured ? 'true' : 'false');
         data.append('meta_title', formData.meta_title);
         data.append('meta_description', formData.meta_description);
+        data.append('meta_keywords', formData.meta_keywords);
 
         if (formData.image) {
             data.append('image', formData.image);
@@ -129,9 +137,11 @@ const ProductForm = () => {
                     }
                 });
             }
+            toast.success(`Product ${isEdit ? 'updated' : 'created'} successfully!`);
             navigate('/admin/products');
         } catch (err: any) {
             console.error("Failed to save product", err);
+            toast.error("Failed to save product.");
             const msg = err.response?.data ? JSON.stringify(err.response.data) : "Failed to save product.";
             setError(msg);
         } finally {
@@ -189,18 +199,41 @@ const ProductForm = () => {
                                     {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                                 </select>
                             </div>
-                            <div>
-                                <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Brand</label>
-                                <select
-                                    name="brand"
-                                    value={formData.brand}
-                                    onChange={handleChange}
-                                    className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
-                                    required
-                                >
-                                    <option value="">Select Brand</option>
-                                    {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
-                                </select>
+                            <div className="md:col-span-2">
+                                <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-3">Available Brands</label>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 bg-[#121212] border border-[#333] p-4 max-h-[200px] overflow-y-auto custom-scrollbar">
+                                    {brands.map(brand => {
+                                        const isChecked = formData.brands.includes(brand.id);
+                                        return (
+                                            <label
+                                                key={brand.id}
+                                                className={`flex items-center gap-3 p-2 border transition-all cursor-pointer group ${isChecked
+                                                    ? 'bg-[#C41E3A]/10 border-[#C41E3A] text-white'
+                                                    : 'bg-transparent border-[#333] text-[#888] hover:border-[#444]'
+                                                    }`}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="hidden"
+                                                    checked={isChecked}
+                                                    onChange={() => {
+                                                        setFormData(prev => ({
+                                                            ...prev,
+                                                            brands: isChecked
+                                                                ? prev.brands.filter(id => id !== brand.id)
+                                                                : [...prev.brands, brand.id]
+                                                        }));
+                                                    }}
+                                                />
+                                                <div className={`w-4 h-4 border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#C41E3A] border-[#C41E3A]' : 'border-[#444] group-hover:border-[#666]'
+                                                    }`}>
+                                                    {isChecked && <div className="w-2 h-2 bg-white" />}
+                                                </div>
+                                                <span className="text-xs font-bold uppercase truncate">{brand.name}</span>
+                                            </label>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
 
@@ -283,6 +316,17 @@ const ProductForm = () => {
                                         onChange={handleChange}
                                         rows={3}
                                         className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors resize-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Meta Keywords</label>
+                                    <textarea
+                                        name="meta_keywords"
+                                        value={formData.meta_keywords}
+                                        onChange={handleChange}
+                                        rows={2}
+                                        className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors resize-none"
+                                        placeholder="keyword1, keyword2, keyword3"
                                     />
                                 </div>
                                 <div>

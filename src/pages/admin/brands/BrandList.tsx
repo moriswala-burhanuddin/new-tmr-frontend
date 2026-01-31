@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import api from '../../../lib/axios';
 import { useAuth } from '../../../context/AuthContext';
 import { fixImageUrl } from '../../../lib/utils';
@@ -33,9 +34,10 @@ const BrandList = () => {
                 headers: { Authorization: `Token ${token}` }
             });
             setBrands(brands.filter(b => b.id !== id));
+            toast.success("Brand deleted successfully");
         } catch (error) {
             console.error("Failed to delete brand", error);
-            alert("Failed to delete brand");
+            toast.error("Failed to delete brand");
         }
     };
 

@@ -32,6 +32,7 @@ const Contact = () => {
             <Seo
                 title={data?.seo_title || "Contact Us"}
                 description={data?.seo_description || "Get in touch with us for industrial equipment inquiries."}
+                keywords={data?.seo_keywords}
             />
 
             {/* Hero Section */}
@@ -80,44 +81,81 @@ const Contact = () => {
                             Contact Information
                         </h2>
 
-                        <div className="space-y-8 mb-12">
-                            <div className="flex items-start gap-4">
-                                <div className="bg-[#1A1A1A] p-3 border border-[#333] rounded-sm text-[#C41E3A]">
-                                    <MapPin className="w-6 h-6" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+                            {/* Namanve Showroom */}
+                            <div className="space-y-6">
+                                <h3 className="text-xl font-bold text-white uppercase tracking-wider mb-4 border-b border-[#333] pb-2">Namanve Showroom</h3>
+                                <div className="flex items-start gap-4">
+                                    <div className="bg-[#1A1A1A] p-2 border border-[#333] rounded-sm text-[#C41E3A]">
+                                        <MapPin className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white text-sm font-semibold uppercase mb-1">Address</p>
+                                        <p className="text-xs leading-relaxed">Shop No. 1 Namanve Industrial Park along Kampala-Jinja High Way diagonally opposite DTB Namanve Branch</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className="text-white font-bold uppercase tracking-wider mb-1">Visit Us</h3>
-                                    <p className="whitespace-pre-line">{data?.address || "123 Industrial Ave, Tech City, ST 12345"}</p>
+                                <div className="flex items-start gap-4">
+                                    <div className="bg-[#1A1A1A] p-2 border border-[#333] rounded-sm text-[#C41E3A]">
+                                        <Phone className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white text-sm font-semibold uppercase mb-1">Telephone</p>
+                                        <p className="text-xs">+256 758 670926</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="bg-[#1A1A1A] p-2 border border-[#333] rounded-sm text-[#C41E3A]">
+                                        <Mail className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white text-sm font-semibold uppercase mb-1">Email</p>
+                                        <p className="text-xs">tmri.namanve@gmail.com</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-4">
-                                <div className="bg-[#1A1A1A] p-3 border border-[#333] rounded-sm text-[#C41E3A]">
-                                    <Phone className="w-6 h-6" />
+                            {/* 6th Street Shop */}
+                            <div className="space-y-6">
+                                <h3 className="text-xl font-bold text-white uppercase tracking-wider mb-4 border-b border-[#333] pb-2">6th Street Shop</h3>
+                                <div className="flex items-start gap-4">
+                                    <div className="bg-[#1A1A1A] p-2 border border-[#333] rounded-sm text-[#C41E3A]">
+                                        <MapPin className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white text-sm font-semibold uppercase mb-1">Address</p>
+                                        <p className="text-xs leading-relaxed">Shop No.: 1, Plot 167-169, 6th Street Industrial Area, Kampala, Uganda. P.O. Box No. 28597 Kampala.</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className="text-white font-bold uppercase tracking-wider mb-1">Call Us</h3>
-                                    <p>{data?.phone || "+1 (555) 123-4567"}</p>
+                                <div className="flex items-start gap-4">
+                                    <div className="bg-[#1A1A1A] p-2 border border-[#333] rounded-sm text-[#C41E3A]">
+                                        <Phone className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white text-sm font-semibold uppercase mb-1">Telephone</p>
+                                        <p className="text-xs">+256 753 683593</p>
+                                        <p className="text-xs">+256 706 127 152</p>
+                                        <p className="text-xs">+256 765 941 646</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="bg-[#1A1A1A] p-2 border border-[#333] rounded-sm text-[#C41E3A]">
+                                        <Mail className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white text-sm font-semibold uppercase mb-1">Email</p>
+                                        <p className="text-xs">tmri.uganda@gmail.com</p>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div className="flex items-start gap-4">
-                                <div className="bg-[#1A1A1A] p-3 border border-[#333] rounded-sm text-[#C41E3A]">
-                                    <Mail className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h3 className="text-white font-bold uppercase tracking-wider mb-1">Email Us</h3>
-                                    <p>{data?.email || "info@tmrproject.com"}</p>
-                                </div>
+                        <div className="flex items-start gap-4 mb-12 bg-[#1A1A1A] p-4 border border-[#333]">
+                            <div className="bg-[#121212] p-3 border border-[#333] rounded-sm text-[#C41E3A]">
+                                <Clock className="w-6 h-6" />
                             </div>
-                            <div className="flex items-start gap-4">
-                                <div className="bg-[#1A1A1A] p-3 border border-[#333] rounded-sm text-[#C41E3A]">
-                                    <Clock className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h3 className="text-white font-bold uppercase tracking-wider mb-1">Business Hours</h3>
-                                    <p>Mon - Fri: 8:00 AM - 6:00 PM<br />Sat: 9:00 AM - 2:00 PM</p>
-                                </div>
+                            <div>
+                                <h3 className="text-white font-bold uppercase tracking-wider mb-1">Business Hours</h3>
+                                <p className="text-sm">Mon - Fri: 8:00 AM - 6:00 PM<br />Sat: 9:00 AM - 2:00 PM</p>
                             </div>
                         </div>
 
