@@ -5,8 +5,9 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export function fixImageUrl(url: string | null | undefined): string | undefined {
+export function fixImageUrl(url: any): string | undefined {
     if (!url) return undefined;
+    if (typeof url !== 'string') return undefined;
 
     // Handle encoded colon
     let processedUrl = url.replace('%3A', ':');

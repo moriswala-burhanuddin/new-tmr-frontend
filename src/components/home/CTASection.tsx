@@ -1,11 +1,30 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Mail } from 'lucide-react';
+import { ArrowRight, Mail, FileDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import api from '../../lib/axios';
+import { fixImageUrl } from '../../lib/utils';
 
 const CTASection = () => {
+    const [catalogueUrl, setCatalogueUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchCatalogue = async () => {
+            try {
+                const response = await api.get('pages/home/');
+                if (response.data.catalogue_file) {
+                    setCatalogueUrl(fixImageUrl(response.data.catalogue_file) || null);
+                }
+            } catch (error) {
+                console.error("Failed to fetch catalogue", error);
+            }
+        };
+        fetchCatalogue();
+    }, []);
+
     return (
         <section className="relative py-24 overflow-hidden bg-[#1A1A1A] border-t border-[#333]">
-            {/* Background with Gradient and Blur */}
+            {/* ... background elements ... */}
             <div className="absolute inset-0 bg-[#121212]">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#C41E3A]/10 rounded-full blur-3xl mix-blend-screen opacity-30 animate-pulse" />
                 <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#A01A2E]/10 rounded-full blur-3xl mix-blend-screen opacity-30 animate-pulse delay-700" />
@@ -34,10 +53,22 @@ const CTASection = () => {
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
 
-                        <Link to="/contact" className="w-full sm:w-auto px-10 py-4 bg-transparent hover:bg-white/10 text-white font-bold backdrop-blur-sm border-2 border-white/30 hover:border-white transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-display">
-                            <Mail className="w-5 h-5" />
-                            Contact Sales
-                        </Link>
+                        {catalogueUrl ? (
+                            <a
+                                href={catalogueUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full sm:w-auto px-10 py-4 bg-transparent hover:bg-white/10 text-white font-bold backdrop-blur-sm border-2 border-[#C41E3A] hover:border-white transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-display"
+                            >
+                                <FileDown className="w-5 h-5" />
+                                Download Catalogue
+                            </a>
+                        ) : (
+                            <Link to="/contact" className="w-full sm:w-auto px-10 py-4 bg-transparent hover:bg-white/10 text-white font-bold backdrop-blur-sm border-2 border-white/30 hover:border-white transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-display">
+                                <Mail className="w-5 h-5" />
+                                Contact Sales
+                            </Link>
+                        )}
 
                         <Link to="/contact" className="w-full sm:w-auto px-10 py-4 bg-transparent hover:bg-[#C41E3A] text-white font-bold border-2 border-[#444] hover:border-[#C41E3A] transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-display">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

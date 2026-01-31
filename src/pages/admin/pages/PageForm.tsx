@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import api from '../../../lib/axios';
-import { Save, ArrowLeft, Upload } from 'lucide-react';
+import { Save, ArrowLeft, Upload, FileDown } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { fixImageUrl } from '../../../lib/utils';
@@ -73,18 +73,17 @@ const PageForm = () => {
         setError('');
 
         const data = new FormData();
-        const imageFields = ['hero_image', 'hero_image_1', 'hero_image_2', 'hero_image_3', 'hero_image_4', 'hero_image_5', 'og_image'];
+        const fileFields = ['hero_image', 'hero_image_1', 'hero_image_2', 'hero_image_3', 'hero_image_4', 'hero_image_5', 'og_image', 'catalogue_file'];
 
         Object.keys(formData).forEach(key => {
             const value = formData[key];
             if (value !== null && value !== undefined) {
-                // Check if it's an image field
-                if (imageFields.includes(key)) {
+                // Check if it's an image/file field
+                if (fileFields.includes(key)) {
                     // Only append if it's a File object (new upload)
                     if (value instanceof File) {
                         data.append(key, value);
                     }
-                    // If it's a string, it's an existing URL, so we skip it to avoid "Not a file" error
                 } else {
                     // For non-image fields (text, etc), append directly
                     data.append(key, value);
@@ -238,6 +237,41 @@ const PageForm = () => {
                             <div><label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Instagram URL</label><input type="text" name="instagram_url" value={formData.instagram_url || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A]" /></div>
                             <div><label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">LinkedIn URL</label><input type="text" name="linkedin_url" value={formData.linkedin_url || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A]" /></div>
                             <div><label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">YouTube URL</label><input type="text" name="youtube_url" value={formData.youtube_url || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A]" /></div>
+                        </div>
+
+                        <h3 className="text-white font-bold uppercase border-b border-[#333] pb-2 mt-8">Product Catalogue</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                            <div className="border-2 border-dashed border-[#333] p-6 text-center bg-[#121212] hover:border-[#C41E3A] transition-colors relative">
+                                <input
+                                    type="file"
+                                    name="catalogue_file"
+                                    onChange={handleFileChange}
+                                    accept=".pdf"
+                                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                                />
+                                <div className="text-[#666] flex flex-col items-center gap-2">
+                                    <FileDown className="w-8 h-8" />
+                                    <span className="text-xs font-bold uppercase tracking-tighter">Upload New PDF Catalogue</span>
+                                </div>
+                            </div>
+                            <div>
+                                {formData.catalogue_file && (
+                                    <div className="bg-[#111] p-4 border border-[#333] flex items-center justify-between">
+                                        <div className="flex items-center gap-3 text-sm text-[#AAAAAA]">
+                                            <FileDown className="w-5 h-5 text-red-500" />
+                                            <span>Current Catalogue Available</span>
+                                        </div>
+                                        <a
+                                            href={previews.catalogue_file || fixImageUrl(formData.catalogue_file)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[#C41E3A] text-xs font-bold hover:underline"
+                                        >
+                                            View PDF
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}

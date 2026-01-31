@@ -1,13 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { Menu, X, FileDown } from 'lucide-react';
+import { cn, fixImageUrl } from '../../lib/utils';
+import api from '../../lib/axios';
 
 const Navbar = () => {
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
+    const [catalogueUrl, setCatalogueUrl] = useState<string | null>(null);
 
     const toggleMenu = () => setIsOpen(!isOpen);
+
+    useEffect(() => {
+        const fetchCatalogue = async () => {
+            try {
+                const response = await api.get('pages/home/');
+                if (response.data.catalogue_file) {
+                    setCatalogueUrl(fixImageUrl(response.data.catalogue_file) || null);
+                }
+            } catch (error) {
+                console.error("Failed to fetch catalogue", error);
+            }
+        };
+        fetchCatalogue();
+    }, []);
 
     const navLinks = [
         { name: 'Home', path: '/', active: location.pathname === '/' },
@@ -72,8 +88,19 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Icons (Right) - Removed */}
+                    {/* Icons (Right) - Toggle Catalogue Button */}
                     <div className="hidden md:flex items-center gap-6 pl-4">
+                        {catalogueUrl && (
+                            <a
+                                href={catalogueUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 bg-[#C41E3A] hover:bg-white text-white hover:text-[#C41E3A] px-4 py-2 rounded-md font-bold text-xs uppercase transition-all shadow-lg border border-transparent hover:border-[#C41E3A] whitespace-nowrap"
+                            >
+                                <FileDown className="h-4 w-4" />
+                                Catalogue
+                            </a>
+                        )}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -102,6 +129,20 @@ const Navbar = () => {
                                 {link.name}
                             </Link>
                         ))}
+                        {catalogueUrl && (
+                            <a
+                                href={catalogueUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => setIsOpen(false)}
+                                className="block px-4 py-4 rounded-sm text-base font-bold uppercase tracking-wide font-display bg-[#C41E3A]/10 text-[#C41E3A] border border-[#C41E3A]/20"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <FileDown className="h-5 w-5" />
+                                    Download Catalogue
+                                </div>
+                            </a>
+                        )}
                     </div>
                 </div>
             )}
