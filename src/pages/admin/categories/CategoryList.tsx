@@ -66,9 +66,9 @@ const CategoryList = () => {
                                 <td className="p-4 text-white font-semibold">{category.name}</td>
                                 <td className="p-4 text-[#888] font-mono text-sm">{category.slug}</td>
                                 <td className="p-4 flex gap-3">
-                                    <button className="text-[#AAAAAA] hover:text-white transition-colors">
+                                    <Link to={`/admin/categories/${category.id}`} className="text-[#AAAAAA] hover:text-white transition-colors">
                                         <Edit className="w-5 h-5" />
-                                    </button>
+                                    </Link>
                                     <button
                                         onClick={() => handleDelete(category.id)}
                                         className="text-[#C41E3A] hover:text-[#ff4d6d] transition-colors"

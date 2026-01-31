@@ -27,7 +27,7 @@ const BrandsPage = () => {
     }, []);
 
     return (
-        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-[#121212]">
+        <div className="min-h-screen pt-16 pb-12 px-4 sm:px-6 lg:px-8 bg-[#121212]">
             <Helmet>
                 <title>{cmsContent?.seo_title || "Our Brands | TMR Project"}</title>
                 <meta name="description" content={cmsContent?.seo_description || "Explore our partner brands and their premium industrial products."} />

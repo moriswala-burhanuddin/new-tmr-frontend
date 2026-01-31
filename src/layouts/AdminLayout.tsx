@@ -6,8 +6,7 @@ import {
     FolderOpen,
     Package,
     Mail,
-    FileText,
-    Settings
+    FileText
 } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -55,9 +54,6 @@ const AdminLayout = () => {
                     <Link to="/admin/pages" className={`px-6 py-3 flex items-center transition-all border-l-4 ${isActive('/admin/pages') ? 'bg-[#C41E3A]/10 text-[#C41E3A] border-[#C41E3A]' : 'text-[#AAAAAA] border-transparent hover:bg-white/5 hover:text-white'}`}>
                         <FileText className="w-5 h-5 mr-3" /> Content Pages
                     </Link>
-                    <div className="px-6 py-3 flex items-center text-[#AAAAAA] border-l-4 border-transparent hover:bg-white/5 hover:text-white cursor-not-allowed opacity-50">
-                        <Settings className="w-5 h-5 mr-3" /> Settings
-                    </div>
                 </nav>
             </div>
 

@@ -134,7 +134,7 @@ const ProductList = () => {
                                 </td>
                                 <td className="p-4 text-white font-semibold">{product.name}</td>
                                 <td className="p-4 text-[#AAAAAA]">
-                                    {typeof product.category === 'object' && product.category !== null ? (product.category as any).name : '-'}
+                                    {product.category && typeof product.category === 'object' ? product.category.name : '-'}
                                 </td>
                                 <td className="p-4 text-[#AAAAAA]">
                                     {product.brands.map(b => b.name).join(', ') || '-'}

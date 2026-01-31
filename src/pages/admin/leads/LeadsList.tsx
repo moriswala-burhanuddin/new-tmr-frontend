@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Mail, Phone, Building2, Globe, CheckCircle, XCircle, Search } from 'lucide-react';
+import { Mail, Phone, Building2, Globe, CheckCircle, XCircle, Search, Eye, X, User, Info } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../../../lib/axios';
 import { useAuth } from '../../../context/AuthContext';
@@ -28,8 +28,8 @@ interface WholesaleInquiry {
     details: string;
     created_at: string;
     is_resolved: boolean;
-    product_details?: Product;
-    brand_details?: Brand;
+    product_details?: Product[];
+    brand_details?: Brand[];
 }
 
 const LeadsList = () => {
@@ -37,6 +37,7 @@ const LeadsList = () => {
     const [wholesales, setWholesales] = useState<WholesaleInquiry[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedInquiry, setSelectedInquiry] = useState<{ type: 'contact' | 'wholesale', data: any } | null>(null);
     const { token } = useAuth();
 
     useEffect(() => {
@@ -127,13 +128,20 @@ const LeadsList = () => {
                         <tbody>
                             {filterWholesales.map(item => (
                                 <tr key={item.id} className="border-b border-[#333] hover:bg-[#222] transition-colors">
-                                    <td className="p-4">
+                                    <td className="p-4 flex items-center gap-2">
                                         <button
                                             onClick={() => toggleStatus('wholesale', item.id, item.is_resolved)}
                                             className={`p-1 rounded transition-colors ${item.is_resolved ? 'text-green-500 hover:text-green-400' : 'text-[#666] hover:text-white'}`}
                                             title={item.is_resolved ? "Mark Unresolved" : "Mark Resolved"}
                                         >
                                             {item.is_resolved ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
+                                        </button>
+                                        <button
+                                            onClick={() => setSelectedInquiry({ type: 'wholesale', data: item })}
+                                            className="p-1 text-[#AAAAAA] hover:text-white transition-colors"
+                                            title="View Details"
+                                        >
+                                            <Eye className="w-5 h-5" />
                                         </button>
                                     </td>
                                     <td className="p-4 text-[#666] text-xs font-mono w-32">
@@ -146,8 +154,22 @@ const LeadsList = () => {
                                         <div className="text-sm text-[#AAAAAA] flex items-center gap-2"><Phone className="w-3 h-3" /> {item.contact_number}</div>
                                     </td>
                                     <td className="p-4 text-sm text-[#AAAAAA]">
-                                        {item.brand_details && <div className="font-bold text-white">Brand: {item.brand_details.name}</div>}
-                                        {item.product_details && <div>Product: {item.product_details.name}</div>}
+                                        {item.brand_details && item.brand_details.length > 0 && (
+                                            <div className="mb-2">
+                                                <div className="text-[10px] font-bold text-[#666] uppercase mb-1">Brands</div>
+                                                {item.brand_details.map(b => (
+                                                    <div key={b.id} className="text-white font-medium">{b.name}</div>
+                                                ))}
+                                            </div>
+                                        )}
+                                        {item.product_details && item.product_details.length > 0 && (
+                                            <div>
+                                                <div className="text-[10px] font-bold text-[#666] uppercase mb-1">Products</div>
+                                                {item.product_details.map(p => (
+                                                    <div key={p.id} className="text-white/80">{p.name}</div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </td>
                                     <td className="p-4 text-white text-sm max-w-sm">{item.details}</td>
                                 </tr>
@@ -180,13 +202,20 @@ const LeadsList = () => {
                         <tbody>
                             {filterContacts.map(item => (
                                 <tr key={item.id} className="border-b border-[#333] hover:bg-[#222] transition-colors">
-                                    <td className="p-4">
+                                    <td className="p-4 flex items-center gap-2">
                                         <button
                                             onClick={() => toggleStatus('contact', item.id, item.is_resolved)}
                                             className={`p-1 rounded transition-colors ${item.is_resolved ? 'text-green-500 hover:text-green-400' : 'text-[#666] hover:text-white'}`}
                                             title={item.is_resolved ? "Mark Unresolved" : "Mark Resolved"}
                                         >
                                             {item.is_resolved ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
+                                        </button>
+                                        <button
+                                            onClick={() => setSelectedInquiry({ type: 'contact', data: item })}
+                                            className="p-1 text-[#AAAAAA] hover:text-white transition-colors"
+                                            title="View Details"
+                                        >
+                                            <Eye className="w-5 h-5" />
                                         </button>
                                     </td>
                                     <td className="p-4 text-[#666] text-xs font-mono w-32">
@@ -217,6 +246,173 @@ const LeadsList = () => {
                 </div>
             </div>
 
+            {/* Inquiry Modal */}
+            {selectedInquiry && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                    <div className="bg-[#1A1A1A] border border-[#333] w-full max-w-2xl max-h-[90vh] overflow-y-auto relative shadow-2xl">
+                        {/* Header */}
+                        <div className="sticky top-0 bg-[#1A1A1A] border-b border-[#333] p-6 flex justify-between items-center z-10">
+                            <div>
+                                <h2 className="text-2xl font-bold text-white uppercase tracking-tighter font-display flex items-center gap-3">
+                                    <Info className="w-6 h-6 text-[#C41E3A]" />
+                                    Inquiry Details
+                                </h2>
+                                <p className="text-[#666] text-xs font-mono mt-1">
+                                    #{selectedInquiry.type.toUpperCase()}-{selectedInquiry.data.id} • {new Date(selectedInquiry.data.created_at).toLocaleString()}
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setSelectedInquiry(null)}
+                                className="text-[#666] hover:text-white transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-8 space-y-8">
+                            {/* Contact Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-4">
+                                    <div className="flex items-start gap-4">
+                                        <div className="p-2 bg-[#111] border border-[#333]">
+                                            <User className="w-5 h-5 text-[#C41E3A]" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[#666] text-[10px] font-bold uppercase tracking-wider mb-1">Full Name</label>
+                                            <p className="text-white font-bold">{selectedInquiry.data.name}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-4">
+                                        <div className="p-2 bg-[#111] border border-[#333]">
+                                            <Mail className="w-5 h-5 text-[#C41E3A]" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[#666] text-[10px] font-bold uppercase tracking-wider mb-1">Email Address</label>
+                                            <p className="text-white">{selectedInquiry.data.email}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-4">
+                                        <div className="p-2 bg-[#111] border border-[#333]">
+                                            <Phone className="w-5 h-5 text-[#C41E3A]" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[#666] text-[10px] font-bold uppercase tracking-wider mb-1">Phone Number</label>
+                                            <p className="text-white">{selectedInquiry.data.phone || selectedInquiry.data.contact_number}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    {selectedInquiry.data.business_name && (
+                                        <div className="flex items-start gap-4">
+                                            <div className="p-2 bg-[#111] border border-[#333]">
+                                                <Building2 className="w-5 h-5 text-[#C41E3A]" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[#666] text-[10px] font-bold uppercase tracking-wider mb-1">Business Name</label>
+                                                <p className="text-white">{selectedInquiry.data.business_name}</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {selectedInquiry.type === 'contact' && selectedInquiry.data.website && (
+                                        <div className="flex items-start gap-4">
+                                            <div className="p-2 bg-[#111] border border-[#333]">
+                                                <Globe className="w-5 h-5 text-[#C41E3A]" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[#666] text-[10px] font-bold uppercase tracking-wider mb-1">Website</label>
+                                                <a href={selectedInquiry.data.website} target="_blank" rel="noopener noreferrer" className="text-[#C41E3A] hover:underline">{selectedInquiry.data.website}</a>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {selectedInquiry.type === 'contact' && selectedInquiry.data.budget && (
+                                        <div className="flex items-start gap-4">
+                                            <div className="p-2 bg-[#111] border border-[#333]">
+                                                <div className="text-[#C41E3A] font-bold text-xs">$</div>
+                                            </div>
+                                            <div>
+                                                <label className="block text-[#666] text-[10px] font-bold uppercase tracking-wider mb-1">Budget Range</label>
+                                                <p className="text-white">{selectedInquiry.data.budget}</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Wholesale Interests */}
+                            {selectedInquiry.type === 'wholesale' && (
+                                <div className="space-y-4 border-t border-[#333] pt-6">
+                                    <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 bg-[#C41E3A]"></div>
+                                        Product & Brand Interest
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-6">
+                                        {selectedInquiry.data.brand_details && selectedInquiry.data.brand_details.length > 0 && (
+                                            <div>
+                                                <label className="block text-[#666] text-[10px] font-bold uppercase tracking-wider mb-2">Brands</label>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {selectedInquiry.data.brand_details.map((b: any) => (
+                                                        <span key={b.id} className="px-2 py-1 bg-[#222] border border-[#333] text-white text-xs font-bold">{b.name}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {selectedInquiry.data.product_details && selectedInquiry.data.product_details.length > 0 && (
+                                            <div>
+                                                <label className="block text-[#666] text-[10px] font-bold uppercase tracking-wider mb-2">Products</label>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {selectedInquiry.data.product_details.map((p: any) => (
+                                                        <span key={p.id} className="px-2 py-1 bg-[#222] border border-[#333] text-white/80 text-xs">{p.name}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Main Message / Requirement */}
+                            <div className="space-y-4 border-t border-[#333] pt-6">
+                                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-[#C41E3A]"></div>
+                                    Inquiry Content
+                                </h3>
+                                <div className="bg-[#111] border border-[#333] p-6 text-[#AAAAAA] text-sm leading-relaxed whitespace-pre-line">
+                                    {selectedInquiry.data.requirement || selectedInquiry.data.details}
+                                </div>
+                            </div>
+
+                            {/* Status and Action */}
+                            <div className="pt-4 flex justify-between items-center">
+                                <div className="flex items-center gap-2">
+                                    <div className={`w-3 h-3 rounded-full ${selectedInquiry.data.is_resolved ? 'bg-green-500' : 'bg-[#C41E3A] animate-pulse'}`}></div>
+                                    <span className="text-xs font-bold uppercase tracking-widest text-[#666]">
+                                        Status: <span className={selectedInquiry.data.is_resolved ? 'text-green-500' : 'text-[#C41E3A]'}>
+                                            {selectedInquiry.data.is_resolved ? 'Resolved' : 'Needs Attention'}
+                                        </span>
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={() => toggleStatus(selectedInquiry.type, selectedInquiry.data.id, selectedInquiry.data.is_resolved).then(() => {
+                                        // Update local state for modal
+                                        setSelectedInquiry(prev => prev ? { ...prev, data: { ...prev.data, is_resolved: !prev.data.is_resolved } } : null);
+                                    })}
+                                    className={`px-4 py-2 text-xs font-bold uppercase tracking-widest border transition-all ${selectedInquiry.data.is_resolved
+                                        ? 'border-[#333] text-[#666] hover:text-white hover:bg-[#222]'
+                                        : 'border-[#C41E3A] text-[#C41E3A] hover:bg-[#C41E3A] hover:text-white'}`}
+                                >
+                                    {selectedInquiry.data.is_resolved ? 'Mark Unresolved' : 'Mark as Resolved'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

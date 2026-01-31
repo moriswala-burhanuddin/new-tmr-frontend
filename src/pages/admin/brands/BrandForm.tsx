@@ -15,16 +15,9 @@ const BrandForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         slug: '',
-        description: '',
-        hero_title: '',
-        hero_subtitle: '',
-        content: '',
-        html_content: '',
-        logo: null as File | null,
-        hero_image: null as File | null
+        logo: null as File | null
     });
     const [logoPreview, setLogoPreview] = useState<string | null>(null);
-    const [heroPreview, setHeroPreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -35,15 +28,9 @@ const BrandForm = () => {
             setFormData(prev => ({
                 ...prev,
                 name: b.name,
-                slug: b.slug || '',
-                description: b.description || '',
-                hero_title: b.hero_title || '',
-                hero_subtitle: b.hero_subtitle || '',
-                content: b.content || '',
-                html_content: b.html_content || ''
+                slug: b.slug || ''
             }));
             if (b.logo) setLogoPreview(fixImageUrl(b.logo) || null);
-            if (b.hero_image) setHeroPreview(fixImageUrl(b.hero_image) || null);
         } catch (err) {
             console.error("Failed to fetch brand", err);
             setError("Failed to load brand data.");
@@ -68,9 +55,6 @@ const BrandForm = () => {
             if (name === 'logo') {
                 setFormData(prev => ({ ...prev, logo: file }));
                 setLogoPreview(URL.createObjectURL(file));
-            } else if (name === 'hero_image') {
-                setFormData(prev => ({ ...prev, hero_image: file }));
-                setHeroPreview(URL.createObjectURL(file));
             }
         }
     };
@@ -82,17 +66,9 @@ const BrandForm = () => {
 
         const data = new FormData();
         data.append('name', formData.name);
-        data.append('description', formData.description);
-        data.append('hero_title', formData.hero_title);
-        data.append('hero_subtitle', formData.hero_subtitle);
-        data.append('content', formData.content);
-        data.append('html_content', formData.html_content);
 
         if (formData.logo) {
             data.append('logo', formData.logo);
-        }
-        if (formData.hero_image) {
-            data.append('hero_image', formData.hero_image);
         }
 
         try {
@@ -152,41 +128,7 @@ const BrandForm = () => {
                     />
                 </div>
 
-                <div>
-                    <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Short Description</label>
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors resize-none"
-                        rows={2}
-                    />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Hero Title</label>
-                        <input
-                            type="text"
-                            name="hero_title"
-                            value={formData.hero_title}
-                            onChange={handleChange}
-                            className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Hero Subtitle</label>
-                        <input
-                            type="text"
-                            name="hero_subtitle"
-                            value={formData.hero_subtitle}
-                            onChange={handleChange}
-                            className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
-                        />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6">
                     <div>
                         <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Logo Upload</label>
                         <div className="border-2 border-dashed border-[#333] p-4 text-center bg-[#121212] hover:border-[#C41E3A] transition-colors relative min-h-[150px] flex flex-col items-center justify-center">
@@ -199,7 +141,7 @@ const BrandForm = () => {
                             />
                             {logoPreview ? (
                                 <div className="flex flex-col items-center">
-                                    <img src={logoPreview} alt="Preview" className="h-16 object-contain mb-2" />
+                                    <img src={logoPreview} alt="Preview" className="h-24 object-contain mb-2" />
                                     <span className="text-[#666] text-[10px] font-bold uppercase">Change Logo</span>
                                 </div>
                             ) : (
@@ -209,50 +151,6 @@ const BrandForm = () => {
                             )}
                         </div>
                     </div>
-                    <div>
-                        <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Hero Image</label>
-                        <div className="border-2 border-dashed border-[#333] p-4 text-center bg-[#121212] hover:border-[#C41E3A] transition-colors relative min-h-[150px] flex flex-col items-center justify-center">
-                            <input
-                                type="file"
-                                name="hero_image"
-                                onChange={handleFileChange}
-                                accept="image/*"
-                                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                            />
-                            {heroPreview ? (
-                                <div className="flex flex-col items-center">
-                                    <img src={heroPreview} alt="Preview" className="h-16 object-contain mb-2" />
-                                    <span className="text-[#666] text-[10px] font-bold uppercase">Change Hero</span>
-                                </div>
-                            ) : (
-                                <div className="text-[#666] text-xs">
-                                    <span className="text-[#C41E3A] font-bold">Upload Hero</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Main Content</label>
-                    <textarea
-                        name="content"
-                        value={formData.content}
-                        onChange={handleChange}
-                        className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
-                        rows={6}
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">HTML Content / Detail Text</label>
-                    <textarea
-                        name="html_content"
-                        value={formData.html_content}
-                        onChange={handleChange}
-                        className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors font-mono text-sm"
-                        rows={6}
-                    />
                 </div>
 
                 <div className="pt-4 border-t border-[#333]">

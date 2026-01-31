@@ -65,7 +65,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                                 </span>
                             )}
                             <span className="text-[#C41E3A] text-xs font-bold uppercase tracking-[0.2em] font-display">
-                                {(typeof product.category === 'object' ? product.category?.name : null) || 'Industrial Gear'}
+                                {(product.category && typeof product.category === 'object' ? product.category.name : 'UNCATEGORIZED')}
                             </span>
                         </div>
 

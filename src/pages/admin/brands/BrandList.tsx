@@ -75,9 +75,9 @@ const BrandList = () => {
                                 </td>
                                 <td className="p-4 text-white font-semibold">{brand.name}</td>
                                 <td className="p-4 flex gap-3">
-                                    <button className="text-[#AAAAAA] hover:text-white transition-colors">
+                                    <Link to={`/admin/brands/${brand.id}`} className="text-[#AAAAAA] hover:text-white transition-colors">
                                         <Edit className="w-5 h-5" />
-                                    </button>
+                                    </Link>
                                     <button
                                         onClick={() => handleDelete(brand.id)}
                                         className="text-[#C41E3A] hover:text-[#ff4d6d] transition-colors"
