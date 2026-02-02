@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+
 
 const WhatsAppFloat = () => {
     const phone = "256789100442";
