@@ -1,10 +1,11 @@
 
-import { useEffect, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { createWholesaleInquiry, type WholesaleData } from '../../api/leads';
 import { getBrands, getProducts, type Brand, type Product } from '../../api/products';
-import { Send, User, Building2, Mail, Phone, FileText } from 'lucide-react';
+import { fixImageUrl } from '../../lib/utils';
+import { Send, User, Building2, Mail, Phone, FileText, ChevronDown, X } from 'lucide-react';
 
 const WholesaleForm = () => {
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<WholesaleData>();
@@ -12,6 +13,30 @@ const WholesaleForm = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedBrands, setSelectedBrands] = useState<number[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
+    const [brandSearch, setBrandSearch] = useState('');
+    const [productSearch, setProductSearch] = useState('');
+
+    const [showBrandDropdown, setShowBrandDropdown] = useState(false);
+    const [showProductDropdown, setShowProductDropdown] = useState(false);
+    const brandRef = useRef<HTMLDivElement>(null);
+    const productRef = useRef<HTMLDivElement>(null);
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (brandRef.current && !brandRef.current.contains(event.target as Node)) {
+                setShowBrandDropdown(false);
+            }
+            if (productRef.current && !productRef.current.contains(event.target as Node)) {
+                setShowProductDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -109,76 +134,151 @@ const WholesaleForm = () => {
                     {errors.contact_number && <p className="text-[#C41E3A] text-xs ml-1 font-bold">{errors.contact_number.message}</p>}
                 </div>
 
-                {/* Brand Selection Grid */}
-                <div className="space-y-4 md:col-span-2">
-                    <div className="flex items-center justify-between border-b border-[#333] pb-2">
-                        <label className={labelClasses}>Brands of Interest</label>
-                        <span className="text-[10px] text-[#C41E3A] font-bold uppercase tracking-widest bg-[#C41E3A]/10 px-2 py-0.5 rounded-full">
-                            {selectedBrands.length} Selected
-                        </span>
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-                        {brands.map(brand => (
-                            <button
-                                key={brand.id}
-                                type="button"
-                                onClick={() => {
-                                    setSelectedBrands(prev =>
-                                        prev.includes(brand.id)
-                                            ? prev.filter(id => id !== brand.id)
-                                            : [...prev, brand.id]
-                                    );
-                                }}
-                                className={`flex items-center gap-2 p-2 border transition-all text-left ${selectedBrands.includes(brand.id)
-                                    ? "bg-[#C41E3A]/10 border-[#C41E3A] text-white"
-                                    : "bg-[#1A1A1A] border-[#333] text-[#888] hover:border-[#444]"
-                                    }`}
+                {/* Brand Selection - Dropdown & Search */}
+                <div className="space-y-4 md:col-span-2" ref={brandRef}>
+                    <label className={labelClasses}>Brands of Interest</label>
+                    <div className="space-y-3">
+                        {/* Selected Chips */}
+                        {selectedBrands.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                                {brands.filter(b => selectedBrands.includes(b.id)).map(brand => (
+                                    <div key={brand.id} className="flex items-center gap-2 bg-[#C41E3A]/10 border border-[#C41E3A] text-white px-3 py-1.5 rounded-full">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider">{brand.name}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setSelectedBrands(prev => prev.filter(id => id !== brand.id))}
+                                            className="text-[#C41E3A] hover:text-white transition-colors"
+                                        >
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="relative">
+                            <div
+                                onClick={() => setShowBrandDropdown(true)}
+                                className={`w-full bg-[#121212] border border-[#333] px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#555] transition-colors ${showBrandDropdown ? 'border-[#C41E3A]' : ''}`}
                             >
-                                <div className={`w-3 h-3 border flex items-center justify-center ${selectedBrands.includes(brand.id) ? "bg-[#C41E3A] border-[#C41E3A]" : "border-[#444]"
-                                    }`}>
-                                    {selectedBrands.includes(brand.id) && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                                <input
+                                    type="text"
+                                    placeholder={selectedBrands.length > 0 ? "Add more brands..." : "Select Brands..."}
+                                    value={brandSearch}
+                                    onChange={(e) => {
+                                        setBrandSearch(e.target.value);
+                                        setShowBrandDropdown(true);
+                                    }}
+                                    className="bg-transparent border-none focus:outline-none text-white text-sm w-full placeholder:text-[#666] font-sans"
+                                />
+                                <ChevronDown className={`w-4 h-4 text-[#666] transition-transform ${showBrandDropdown ? 'rotate-180' : ''}`} />
+                            </div>
+
+                            {/* Dropdown */}
+                            {showBrandDropdown && (
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-[#1A1A1A] border border-[#333] shadow-2xl z-50 max-h-[300px] overflow-y-auto custom-scrollbar rounded-lg">
+                                    {brands
+                                        .filter(b => !selectedBrands.includes(b.id))
+                                        .filter(b => b.name.toLowerCase().includes(brandSearch.toLowerCase()))
+                                        .slice(0, 50)
+                                        .map(brand => (
+                                            <button
+                                                key={brand.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSelectedBrands(prev => [...prev, brand.id]);
+                                                    setBrandSearch('');
+                                                }}
+                                                className="w-full flex items-center gap-4 p-3 border-b border-[#222] hover:bg-[#252525] transition-colors text-left group last:border-0"
+                                            >
+                                                <div className="w-10 h-10 bg-white rounded p-1 flex items-center justify-center shrink-0">
+                                                    {brand.logo ? (
+                                                        <img src={fixImageUrl(brand.logo)} alt={brand.name} className="max-w-full max-h-full object-contain" />
+                                                    ) : (
+                                                        <span className="text-black font-bold text-[8px] uppercase">{brand.name.substring(0, 2)}</span>
+                                                    )}
+                                                </div>
+                                                <span className="text-xs font-bold uppercase text-gray-300 group-hover:text-white">{brand.name}</span>
+                                            </button>
+                                        ))}
+                                    {brands.filter(b => !selectedBrands.includes(b.id) && b.name.toLowerCase().includes(brandSearch.toLowerCase())).length === 0 && (
+                                        <div className="p-4 text-center text-gray-500 text-xs">No matching brands found</div>
+                                    )}
                                 </div>
-                                <span className="text-[10px] font-bold uppercase truncate">{brand.name}</span>
-                            </button>
-                        ))}
+                            )}
+                        </div>
                     </div>
                 </div>
 
-                {/* Product Selection Grid */}
-                <div className="space-y-4 md:col-span-2">
-                    <div className="flex items-center justify-between border-b border-[#333] pb-2">
-                        <label className={labelClasses}>Products of Interest</label>
-                        <span className="text-[10px] text-[#C41E3A] font-bold uppercase tracking-widest bg-[#C41E3A]/10 px-2 py-0.5 rounded-full">
-                            {selectedProducts.length} Selected
-                        </span>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
-                        {products.map(product => (
-                            <button
-                                key={product.id}
-                                type="button"
-                                onClick={() => {
-                                    setSelectedProducts(prev =>
-                                        prev.includes(product.id)
-                                            ? prev.filter(id => id !== product.id)
-                                            : [...prev, product.id]
-                                    );
-                                }}
-                                className={`flex items-center gap-2 p-2 border transition-all text-left ${selectedProducts.includes(product.id)
-                                    ? "bg-[#C41E3A]/10 border-[#C41E3A] text-white"
-                                    : "bg-[#1A1A1A] border-[#333] text-[#888] hover:border-[#444]"
-                                    }`}
+                {/* Product Selection - Dropdown & Search */}
+                <div className="space-y-4 md:col-span-2" ref={productRef}>
+                    <label className={labelClasses}>Products of Interest</label>
+                    <div className="space-y-3">
+                        {/* Selected Chips */}
+                        {selectedProducts.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                                {products.filter(p => selectedProducts.includes(p.id)).map(product => (
+                                    <div key={product.id} className="flex items-center gap-2 bg-[#C41E3A]/10 border border-[#C41E3A] text-white px-3 py-1.5 rounded-full">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider">{product.name}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setSelectedProducts(prev => prev.filter(id => id !== product.id))}
+                                            className="text-[#C41E3A] hover:text-white transition-colors"
+                                        >
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="relative">
+                            <div
+                                onClick={() => setShowProductDropdown(true)}
+                                className={`w-full bg-[#121212] border border-[#333] px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#555] transition-colors ${showProductDropdown ? 'border-[#C41E3A]' : ''}`}
                             >
-                                <div className={`w-3 h-3 border flex items-center justify-center ${selectedProducts.includes(product.id) ? "bg-[#C41E3A] border-[#C41E3A]" : "border-[#444]"
-                                    }`}>
-                                    {selectedProducts.includes(product.id) && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                                <input
+                                    type="text"
+                                    placeholder={selectedProducts.length > 0 ? "Add more products..." : "Select Products..."}
+                                    value={productSearch}
+                                    onChange={(e) => {
+                                        setProductSearch(e.target.value);
+                                        setShowProductDropdown(true);
+                                    }}
+                                    className="bg-transparent border-none focus:outline-none text-white text-sm w-full placeholder:text-[#666] font-sans"
+                                />
+                                <ChevronDown className={`w-4 h-4 text-[#666] transition-transform ${showProductDropdown ? 'rotate-180' : ''}`} />
+                            </div>
+
+                            {/* Dropdown */}
+                            {showProductDropdown && (
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-[#1A1A1A] border border-[#333] shadow-2xl z-50 max-h-[300px] overflow-y-auto custom-scrollbar rounded-lg">
+                                    {products
+                                        .filter(p => !selectedProducts.includes(p.id))
+                                        .filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase()))
+                                        .slice(0, 50)
+                                        .map(product => (
+                                            <button
+                                                key={product.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSelectedProducts(prev => [...prev, product.id]);
+                                                    setProductSearch('');
+                                                }}
+                                                className="w-full flex items-center gap-4 p-3 border-b border-[#222] hover:bg-[#252525] transition-colors text-left group last:border-0"
+                                            >
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="text-sm font-bold uppercase text-gray-300 group-hover:text-white truncate">{product.name}</div>
+                                                    <div className="text-[10px] text-gray-600 group-hover:text-gray-400">SKU: {product.id}</div>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    {products.filter(p => !selectedProducts.includes(p.id) && p.name.toLowerCase().includes(productSearch.toLowerCase())).length === 0 && (
+                                        <div className="p-4 text-center text-gray-500 text-xs">No matching products found</div>
+                                    )}
                                 </div>
-                                <div className="min-w-0">
-                                    <div className="text-[10px] font-bold uppercase truncate">{product.name}</div>
-                                    <div className="text-[8px] text-[#666] uppercase">{product.category_details?.name}</div>
-                                </div>
-                            </button>
-                        ))}
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

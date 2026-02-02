@@ -62,10 +62,10 @@ const AdminLayout = () => {
         <div className="flex h-screen bg-[#121212] text-white overflow-hidden font-sans">
             {/* Desktop Sidebar */}
             <div className="hidden lg:flex w-[260px] bg-[#2A2A2A] border-r border-[#333] flex-col shrink-0">
-                <div className="h-[70px] flex items-center px-6 border-b border-[#333] bg-[#1A1A1A]">
-                    <div className="text-2xl font-extrabold tracking-tighter">
-                        TMR <span className="text-[#C41E3A]">Admin</span>
-                    </div>
+                <div className="h-[90px] flex items-center justify-center px-6 border-b border-[#333] bg-[#1A1A1A]">
+                    <Link to="/admin/dashboard" className="flex items-center justify-center w-full">
+                        <img src="/tmrlogo.png" alt="TMR Logo" className="h-16 w-auto object-contain" />
+                    </Link>
                 </div>
                 <nav className="flex-1 py-6 overflow-y-auto">
                     <NavContent />
@@ -77,7 +77,9 @@ const AdminLayout = () => {
                 <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
                 <div className="relative w-64 h-full bg-[#1A1A1A] border-r border-[#333] flex flex-col">
                     <div className="p-6 border-b border-[#333] flex items-center justify-between">
-                        <div className="text-xl font-extrabold tracking-tighter">TMR <span className="text-[#C41E3A]">Admin</span></div>
+                        <Link to="/admin/dashboard" className="flex items-center gap-2">
+                            <img src="/tmrlogo.png" alt="TMR Logo" className="h-10 w-auto" />
+                        </Link>
                         <button onClick={() => setIsMobileMenuOpen(false)} className="text-[#666] hover:text-white"><X className="w-6 h-6" /></button>
                     </div>
                     <nav className="flex-1 py-6 overflow-y-auto">

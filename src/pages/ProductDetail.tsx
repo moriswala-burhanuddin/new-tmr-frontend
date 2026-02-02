@@ -32,8 +32,8 @@ const ProductDetail = () => {
 
     const handleInquire = () => {
         if (!product) return;
-        const phone = "1234567890"; // To be configured dynamically if needed
-        const message = encodeURIComponent(`Inquiry about: ${product.name} (SKU: ${product.id}). I would like to know more about this product.`);
+        const phone = "256789100442";
+        const message = encodeURIComponent(`Hi TMR Industrial, I am interested in: ${product.name} (SKU: ${product.id}). ${window.location.href}`);
         window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
     };
 

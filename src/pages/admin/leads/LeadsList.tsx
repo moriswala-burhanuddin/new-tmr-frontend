@@ -189,7 +189,7 @@ const LeadsList = () => {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold text-white uppercase tracking-tighter font-display border-l-4 border-[#C41E3A] pl-4">General Inquiries</h1>
                 </div>
-                <div className="bg-[#1A1A1A] border border-[#333] overflow-hidden">
+                <div className="bg-[#1A1A1A] border border-[#333] overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-[#111] border-b border-[#333]">

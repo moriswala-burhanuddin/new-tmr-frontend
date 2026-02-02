@@ -52,12 +52,6 @@ const AllProducts = () => {
     return (
         <section className="py-20 bg-[#121212] border-t border-[#333]">
             <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
-                <div className="mb-12 text-center">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white uppercase tracking-tighter font-display mb-4">
-                        Product Inventory
-                    </h2>
-                </div>
-
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Sidebar Filter */}
                     <div className="lg:w-1/4">

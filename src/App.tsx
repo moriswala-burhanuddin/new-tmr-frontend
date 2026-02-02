@@ -25,9 +25,12 @@ import PageList from './pages/admin/pages/PageList';
 import PageForm from './pages/admin/pages/PageForm';
 import LeadsList from './pages/admin/leads/LeadsList';
 
+import ScrollToTop from './components/common/ScrollToTop';
+
 function App() {
   return (
     <AuthProvider>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

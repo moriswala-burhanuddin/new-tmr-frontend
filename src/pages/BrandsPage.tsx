@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '../components/common/Seo';
 import { getBrands, type Brand } from '../api/products';
 import { getBrandPageContent, type BrandPageContent } from '../api/pages';
 import { ArrowRight, Box, ShieldCheck, Zap } from 'lucide-react';
@@ -28,18 +28,18 @@ const BrandsPage = () => {
 
     return (
         <div className="min-h-screen pt-16 pb-12 px-4 sm:px-6 lg:px-8 bg-[#121212]">
-            <Helmet>
-                <title>{cmsContent?.seo_title || "Our Brands | TMR Project"}</title>
-                <meta name="description" content={cmsContent?.seo_description || "Explore our partner brands and their premium industrial products."} />
-                {cmsContent?.seo_keywords && <meta name="keywords" content={cmsContent.seo_keywords} />}
-            </Helmet>
+            <Seo
+                title={cmsContent?.seo_title || "Our Brands"}
+                description={cmsContent?.seo_description || "Explore our partner brands and their premium industrial products."}
+                keywords={cmsContent?.seo_keywords}
+            />
 
             <div className="max-w-7xl mx-auto">
                 {/* Hero Section */}
                 <div className="relative h-[300px] flex items-center justify-center border-b-[5px] border-[#C41E3A] mb-16 overflow-hidden">
                     <div className="absolute inset-0 z-0">
                         {cmsContent?.hero_image ? (
-                            <img src={fixImageUrl(cmsContent.hero_image)} alt="Our Brands" className="w-full h-full object-cover opacity-30 grayscale" />
+                            <img src={fixImageUrl(cmsContent.hero_image)} alt="Our Brands" className="w-full h-full object-cover opacity-30" />
                         ) : (
                             <div className="w-full h-full bg-[#1A1A1A]"></div>
                         )}
@@ -109,7 +109,7 @@ const BrandsPage = () => {
                             <div className="absolute top-2 right-2 w-2 h-2 bg-[#333] group-hover:bg-[#C41E3A] transition-colors rounded-full"></div>
 
                             {brand.logo ? (
-                                <img src={fixImageUrl(brand.logo)} alt={brand.name} className="h-24 object-contain mb-6 filter grayscale group-hover:grayscale-0 transition-all duration-500" />
+                                <img src={fixImageUrl(brand.logo)} alt={brand.name} className="h-24 object-contain mb-6 transition-all duration-500" />
                             ) : (
                                 <div className="h-24 w-24 bg-[#222] rounded-full flex items-center justify-center mb-6 border border-[#333]">
                                     <span className="text-2xl font-bold text-[#666]">{brand.name.charAt(0)}</span>

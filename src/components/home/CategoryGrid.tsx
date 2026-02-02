@@ -19,13 +19,31 @@ const CategoryGrid = () => {
             title: 'LIFTING EQUIPMENT',
             image: '/assets/images/lifting-eq.png',
             link: '/products?category=lifting-equipment'
+        },
+        {
+            id: 4,
+            title: 'Industrial tools',
+            image: '/assets/images/Industrial tools.png',
+            link: '/products?category=industrial-tools'
+        },
+        {
+            id: 5,
+            title: 'Furniture hardware and fittings',
+            image: '/assets/images/Furniture hardware and fittings.png',
+            link: '/products?category=furniture-hardware'
+        },
+        {
+            id: 6,
+            title: 'oil and lubricants',
+            image: '/assets/images/oil.png',
+            link: '/products?category=oil-and-lubricants'
         }
     ];
 
     return (
         <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
             <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     {categories.map((category) => (
                         <Link
                             key={category.id}

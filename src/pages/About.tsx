@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import Seo from '../components/common/Seo';
 import { getAboutPageContent, type AboutPageContent } from '../api/pages';
 import { fixImageUrl } from '../lib/utils';
@@ -43,7 +44,7 @@ const About = () => {
                 {/* Background Image / Overlay */}
                 <div className="absolute inset-0 z-0">
                     {data?.hero_image ? (
-                        <img src={fixImageUrl(data.hero_image)} alt="About Us" className="w-full h-full object-cover opacity-30 grayscale" />
+                        <img src={fixImageUrl(data.hero_image)} alt="About Us" className="w-full h-full object-cover opacity-30" />
                     ) : (
                         <div className="w-full h-full bg-[#1A1A1A]"></div>
                     )}
@@ -53,7 +54,7 @@ const About = () => {
 
                 <div className="relative z-10 text-center px-4">
                     <motion.h1
-                        className="text-5xl md:text-7xl font-bold text-white mb-4 uppercase tracking-tighter font-display drop-shadow-xl"
+                        className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-4 uppercase tracking-tighter font-display drop-shadow-xl"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}
@@ -149,9 +150,9 @@ const About = () => {
 
                         <div className="bg-[#C41E3A] p-8 text-white text-center">
                             <h4 className="font-bold uppercase tracking-widest text-lg mb-4 font-display">Ready to Work?</h4>
-                            <button className="bg-white text-[#C41E3A] px-6 py-2 font-bold uppercase hover:bg-[#121212] hover:text-white transition-colors w-full">
+                            <Link to="/contact" className="inline-block bg-white text-[#C41E3A] px-6 py-2 font-bold uppercase hover:bg-[#121212] hover:text-white transition-colors w-full">
                                 Contact Us
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

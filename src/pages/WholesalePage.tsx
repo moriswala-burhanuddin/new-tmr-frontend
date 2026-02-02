@@ -57,7 +57,7 @@ const WholesalePage = () => {
 
                 <div className="relative z-10 text-center px-4">
                     <motion.h1
-                        className="text-5xl md:text-7xl font-bold text-white mb-4 uppercase tracking-tighter font-display drop-shadow-xl"
+                        className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-4 uppercase tracking-tighter font-display drop-shadow-xl"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}

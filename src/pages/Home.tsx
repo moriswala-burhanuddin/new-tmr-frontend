@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Hero from '../components/home/Hero';
 import CategoryGrid from '../components/home/CategoryGrid';
-import AllProducts from '../components/home/AllProducts';
 import BrandShowcase from '../components/home/BrandShowcase';
 import CTASection from '../components/home/CTASection';
 import SocialProof from '../components/home/SocialProof';
@@ -39,7 +38,6 @@ const Home = () => {
             <CategoryGrid />
             {/* Display static BrandShowcase grid instead of ticker */}
             <BrandShowcase />
-            <AllProducts />
 
             <CTASection />
             <SocialProof links={socialLinks} />

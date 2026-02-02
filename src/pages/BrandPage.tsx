@@ -51,39 +51,39 @@ const BrandPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#121212] pt-20">
+        <div className="min-h-screen bg-[#121212]">
             <Seo
                 title={brand.hero_title || `${brand.name} | TMR Project`}
                 description={brand.hero_subtitle || `Explore high-performance solutions from ${brand.name}.`}
                 image={brand.hero_image ? fixImageUrl(brand.hero_image) : (brand.logo ? fixImageUrl(brand.logo) : undefined)}
             />
 
-            {/* Brand Hero */}
-            <div className="relative overflow-hidden border-b-[5px] border-[#C41E3A]">
+            {/* Brand Hero - FULL WIDTH AND HEIGHT */}
+            <div className="relative overflow-hidden border-b-[5px] border-[#C41E3A] h-screen min-h-[600px] flex items-center justify-center">
                 <div className="absolute inset-0 z-0">
                     {brand.hero_image ? (
-                        <img src={fixImageUrl(brand.hero_image)} alt={brand.name} className="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700" />
+                        <img src={fixImageUrl(brand.hero_image)} alt={brand.name} className="w-full h-full object-cover opacity-60 transition-all duration-700" />
                     ) : (
                         <div className="w-full h-full bg-[#1A1A1A]"></div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-black/40"></div>
                 </div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 flex flex-col items-center text-center">
+                <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center text-center">
                     {brand.logo && (
-                        <div className="w-24 h-24 bg-white rounded-full p-4 mb-8 flex items-center justify-center border-4 border-[#C41E3A]">
+                        <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full p-6 mb-10 flex items-center justify-center border-4 border-[#C41E3A] shadow-[0_0_50px_rgba(196,30,58,0.3)]">
                             <img src={fixImageUrl(brand.logo)} alt={brand.name} className="max-w-full max-h-full object-contain" />
                         </div>
                     )}
-                    <h1 className="text-5xl md:text-7xl font-bold text-white uppercase tracking-tighter font-display mb-4 leading-none drop-shadow-2xl">
+                    <h1 className="text-6xl md:text-9xl font-bold text-white uppercase tracking-tighter font-display mb-6 leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
                         {brand.hero_title || brand.name}
                     </h1>
                     {brand.hero_subtitle && (
-                        <p className="text-[#AAAAAA] text-lg uppercase tracking-[0.2em] font-bold max-w-2xl mb-8">
+                        <p className="text-white text-xl md:text-2xl uppercase tracking-[0.3em] font-bold max-w-3xl mb-12 drop-shadow-lg">
                             {brand.hero_subtitle}
                         </p>
                     )}
-                    <div className="w-24 h-1.5 bg-[#C41E3A]"></div>
+                    <div className="w-32 h-2 bg-[#C41E3A] shadow-[0_0_20px_rgba(196,30,58,0.5)]"></div>
                 </div>
             </div>
 

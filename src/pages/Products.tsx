@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import api from '../lib/axios';
+import Seo from '../components/common/Seo';
 import ProductCard from '../components/products/ProductCard';
 import SidebarFilter from '../components/products/SidebarFilter';
 import type { Product, Brand, Category } from '../types';
@@ -70,10 +71,13 @@ const Products = () => {
     }, [selectedBrand, selectedCategory, categories]);
 
 
-    // ... imports ...
 
     return (
         <div className="bg-[#121212] min-h-screen py-20 relative overflow-hidden">
+            <Seo
+                title="Products | TMR International"
+                description="Browse our complete inventory of heavy-duty equipment and professional-grade tools."
+            />
             {/* Background Mesh */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import api from '../../../lib/axios';
-import { Save, ArrowLeft, Upload, X } from 'lucide-react';
+import { Save, ArrowLeft, Upload, X, Plus } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { fixImageUrl } from '../../../lib/utils';
@@ -32,18 +32,34 @@ const ProductForm = () => {
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
     const [error, setError] = useState('');
+    const [showCategoryModal, setShowCategoryModal] = useState(false);
+    const [showBrandModal, setShowBrandModal] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState('');
+    const [newBrandName, setNewBrandName] = useState('');
+    const [newBrandLogo, setNewBrandLogo] = useState<File | null>(null);
+    const [newBrandLogoPreview, setNewBrandLogoPreview] = useState<string | null>(null);
+    const [modalLoading, setModalLoading] = useState(false);
+    const [brandSearch, setBrandSearch] = useState('');
+
+    const fetchData = async () => {
+        try {
+            const [brandsRes, categoriesRes] = await Promise.all([
+                api.get('brands/'),
+                api.get('categories/')
+            ]);
+            setBrands(brandsRes.data);
+            setCategories(categoriesRes.data);
+        } catch (err) {
+            console.error("Failed to load data", err);
+            setError("Failed to load required data.");
+        }
+    };
 
     useEffect(() => {
         const init = async () => {
-            try {
-                const [brandsRes, categoriesRes] = await Promise.all([
-                    api.get('brands/'),
-                    api.get('categories/')
-                ]);
-                setBrands(brandsRes.data);
-                setCategories(categoriesRes.data);
-
-                if (isEdit) {
+            await fetchData();
+            if (isEdit) {
+                try {
                     const productRes = await api.get(`products/${slug}/`);
                     const p = productRes.data;
                     setFormData({
@@ -59,13 +75,12 @@ const ProductForm = () => {
                         og_image: null
                     });
                     if (p.image) setImagePreview(fixImageUrl(p.image) || null);
+                } catch (err) {
+                    console.error("Failed to fetch product", err);
+                    setError("Failed to load product data.");
                 }
-            } catch (err) {
-                console.error("Failed to load data", err);
-                setError("Failed to load required data.");
-            } finally {
-                setInitialLoading(false);
             }
+            setInitialLoading(false);
         };
         init();
     }, [slug]);
@@ -149,6 +164,57 @@ const ProductForm = () => {
         }
     };
 
+    const handleAddCategory = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newCategoryName.trim()) return;
+        setModalLoading(true);
+        try {
+            const res = await api.post('categories/', { name: newCategoryName }, {
+                headers: { 'Authorization': `Token ${token}` }
+            });
+            toast.success('Category created successfully!');
+            await fetchData();
+            setFormData(prev => ({ ...prev, category: res.data.id.toString() }));
+            setNewCategoryName('');
+            setShowCategoryModal(false);
+        } catch (err) {
+            console.error("Failed to add category", err);
+            toast.error("Failed to add category.");
+        } finally {
+            setModalLoading(false);
+        }
+    };
+
+    const handleAddBrand = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newBrandName.trim()) return;
+        setModalLoading(true);
+        const data = new FormData();
+        data.append('name', newBrandName);
+        if (newBrandLogo) data.append('logo', newBrandLogo);
+
+        try {
+            const res = await api.post('brands/', data, {
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            toast.success('Brand created successfully!');
+            await fetchData();
+            setFormData(prev => ({ ...prev, brands: [...prev.brands, res.data.id] }));
+            setNewBrandName('');
+            setNewBrandLogo(null);
+            setNewBrandLogoPreview(null);
+            setShowBrandModal(false);
+        } catch (err) {
+            console.error("Failed to add brand", err);
+            toast.error("Failed to add brand.");
+        } finally {
+            setModalLoading(false);
+        }
+    };
+
     if (initialLoading) return <div className="text-white">Loading...</div>;
 
     return (
@@ -185,52 +251,89 @@ const ProductForm = () => {
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Category</label>
-                                <select
-                                    name="category"
-                                    value={formData.category}
-                                    onChange={handleChange}
-                                    className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
-                                    required
-                                >
-                                    <option value="">Select Category</option>
-                                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                                </select>
+                                <div className="flex gap-2">
+                                    <select
+                                        name="category"
+                                        value={formData.category}
+                                        onChange={handleChange}
+                                        className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
+                                        required
+                                    >
+                                        <option value="">Select Category</option>
+                                        {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                    </select>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowCategoryModal(true)}
+                                        className="bg-[#333] hover:bg-[#444] text-white p-3 transition-colors"
+                                        title="Add New Category"
+                                    >
+                                        <Plus className="w-5 h-5" />
+                                    </button>
+                                </div>
                             </div>
                             <div className="md:col-span-2">
-                                <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-3">Available Brands</label>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 bg-[#121212] border border-[#333] p-4 max-h-[200px] overflow-y-auto custom-scrollbar">
-                                    {brands.map(brand => {
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 border-b border-[#333] pb-2 gap-3 sm:gap-0">
+                                    <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider">Available Brands</label>
+                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                                        <input
+                                            type="text"
+                                            placeholder="Search brands..."
+                                            value={brandSearch}
+                                            onChange={(e) => setBrandSearch(e.target.value)}
+                                            className="bg-[#121212] border border-[#333] px-3 py-2 sm:py-1 text-xs text-white focus:outline-none focus:border-[#C41E3A] transition-all uppercase font-bold tracking-widest placeholder:text-gray-600 rounded-sm w-full sm:w-[200px]"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowBrandModal(true)}
+                                            className="text-[#C41E3A] hover:text-white transition-colors text-xs font-bold uppercase flex items-center justify-center sm:justify-start gap-1 shrink-0 bg-[#1A1A1A] sm:bg-transparent border border-[#C41E3A]/30 sm:border-none p-2 sm:p-0 rounded sm:rounded-none"
+                                        >
+                                            <Plus className="w-3 h-3" /> Add New Brand
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="space-y-2 bg-[#121212] border border-[#333] p-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+                                    {brands.filter(b => b.name.toLowerCase().includes(brandSearch.toLowerCase())).map(brand => {
                                         const isChecked = formData.brands.includes(brand.id);
                                         return (
-                                            <label
+                                            <button
                                                 key={brand.id}
-                                                className={`flex items-center gap-3 p-2 border transition-all cursor-pointer group ${isChecked
-                                                    ? 'bg-[#C41E3A]/10 border-[#C41E3A] text-white'
-                                                    : 'bg-transparent border-[#333] text-[#888] hover:border-[#444]'
+                                                type="button"
+                                                onClick={() => {
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        brands: isChecked
+                                                            ? prev.brands.filter(id => id !== brand.id)
+                                                            : [...prev.brands, brand.id]
+                                                    }));
+                                                }}
+                                                className={`w-full flex items-center gap-3 p-3 border transition-all text-left group rounded hover:border-[#555] ${isChecked
+                                                    ? 'bg-[#C41E3A]/10 border-[#C41E3A] text-white hover:border-[#C41E3A]'
+                                                    : 'bg-transparent border-[#333] text-[#888]'
                                                     }`}
                                             >
-                                                <input
-                                                    type="checkbox"
-                                                    className="hidden"
-                                                    checked={isChecked}
-                                                    onChange={() => {
-                                                        setFormData(prev => ({
-                                                            ...prev,
-                                                            brands: isChecked
-                                                                ? prev.brands.filter(id => id !== brand.id)
-                                                                : [...prev.brands, brand.id]
-                                                        }));
-                                                    }}
-                                                />
-                                                <div className={`w-4 h-4 border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#C41E3A] border-[#C41E3A]' : 'border-[#444] group-hover:border-[#666]'
-                                                    }`}>
+                                                {/* Logo */}
+                                                <div className={`w-12 h-12 bg-white rounded p-1 flex items-center justify-center shrink-0 ${isChecked ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>
+                                                    {brand.logo ? (
+                                                        <img src={fixImageUrl(brand.logo)} alt={brand.name} className="max-w-full max-h-full object-contain" />
+                                                    ) : (
+                                                        <span className="text-black font-bold text-[10px] uppercase">{brand.name.substring(0, 2)}</span>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex-1">
+                                                    <div className="text-sm font-bold uppercase truncate">{brand.name}</div>
+                                                    <div className={`text-[10px] uppercase tracking-wider mt-1 ${isChecked ? 'text-[#C41E3A]' : 'text-gray-600'}`}>
+                                                        {isChecked ? 'Selected' : 'Select'}
+                                                    </div>
+                                                </div>
+
+                                                <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#C41E3A] border-[#C41E3A]' : 'border-[#444] group-hover:border-[#666]'}`}>
                                                     {isChecked && <div className="w-2 h-2 bg-white" />}
                                                 </div>
-                                                <span className="text-xs font-bold uppercase truncate">{brand.name}</span>
-                                            </label>
+                                            </button>
                                         );
                                     })}
                                 </div>
@@ -359,6 +462,95 @@ const ProductForm = () => {
                     </button>
                 </div>
             </form>
+
+            {/* Category Modal */}
+            {showCategoryModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                    <div className="bg-[#1A1A1A] border border-[#333] p-8 w-full max-w-md relative">
+                        <button onClick={() => setShowCategoryModal(false)} className="absolute top-4 right-4 text-[#666] hover:text-white">
+                            <X className="w-6 h-6" />
+                        </button>
+                        <h2 className="text-2xl font-bold text-white uppercase tracking-tight mb-6 font-display">Add New Category</h2>
+                        <form onSubmit={handleAddCategory} className="space-y-6">
+                            <div>
+                                <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Category Name</label>
+                                <input
+                                    type="text"
+                                    value={newCategoryName}
+                                    onChange={(e) => setNewCategoryName(e.target.value)}
+                                    className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
+                                    required
+                                    autoFocus
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={modalLoading}
+                                className="w-full bg-[#C41E3A] hover:bg-[#A01A2E] text-white font-bold py-3 uppercase tracking-widest transition-colors"
+                            >
+                                {modalLoading ? 'Creating...' : 'Create Category'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Brand Modal */}
+            {showBrandModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                    <div className="bg-[#1A1A1A] border border-[#333] p-8 w-full max-w-md relative">
+                        <button onClick={() => setShowBrandModal(false)} className="absolute top-4 right-4 text-[#666] hover:text-white">
+                            <X className="w-6 h-6" />
+                        </button>
+                        <h2 className="text-2xl font-bold text-white uppercase tracking-tight mb-6 font-display">Add New Brand</h2>
+                        <form onSubmit={handleAddBrand} className="space-y-6">
+                            <div>
+                                <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Brand Name</label>
+                                <input
+                                    type="text"
+                                    value={newBrandName}
+                                    onChange={(e) => setNewBrandName(e.target.value)}
+                                    className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
+                                    required
+                                    autoFocus
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Brand Logo</label>
+                                <div className="border-2 border-dashed border-[#333] p-4 text-center bg-[#121212] hover:border-[#C41E3A] transition-colors relative min-h-[100px] flex flex-col items-center justify-center">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                const file = e.target.files[0];
+                                                setNewBrandLogo(file);
+                                                setNewBrandLogoPreview(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                                    />
+                                    {newBrandLogoPreview ? (
+                                        <img src={newBrandLogoPreview} alt="Logo Preview" className="h-16 object-contain" />
+                                    ) : (
+                                        <div className="text-[#666] text-xs">
+                                            <Upload className="w-5 h-5 mx-auto mb-1 text-[#444]" />
+                                            <span className="text-[#C41E3A] font-bold">Upload Logo</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={modalLoading}
+                                className="w-full bg-[#C41E3A] hover:bg-[#A01A2E] text-white font-bold py-3 uppercase tracking-widest transition-colors"
+                            >
+                                {modalLoading ? 'Creating...' : 'Create Brand'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

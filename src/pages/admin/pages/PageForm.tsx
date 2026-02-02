@@ -206,18 +206,7 @@ const PageForm = () => {
                     </div>
                 </div>
 
-                {/* Content Section (Generic) */}
-                <div className="space-y-4">
-                    <h3 className="text-white font-bold uppercase border-b border-[#333] pb-2">Main Content</h3>
-                    <div>
-                        <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Main Content Text</label>
-                        <textarea name="content" rows={6} value={formData.content || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] mb-4" />
-                    </div>
-                    <div>
-                        <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">HTML / Detail Text (Italian Script Style)</label>
-                        <textarea name="html_content" rows={6} value={formData.html_content || ''} onChange={handleChange} className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] font-mono text-xs" />
-                    </div>
-                </div>
+
 
                 {/* Home Page Specifics */}
                 {type === 'home' && (
