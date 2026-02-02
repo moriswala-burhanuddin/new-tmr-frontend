@@ -29,6 +29,7 @@ const ProductForm = () => {
         og_image: null as File | null
     });
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [ogImagePreview, setOgImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
     const [error, setError] = useState('');
@@ -75,6 +76,7 @@ const ProductForm = () => {
                         og_image: null
                     });
                     if (p.image) setImagePreview(fixImageUrl(p.image) || null);
+                    if (p.og_image) setOgImagePreview(fixImageUrl(p.og_image) || null);
                 } catch (err) {
                     console.error("Failed to fetch product", err);
                     setError("Failed to load product data.");
@@ -103,6 +105,7 @@ const ProductForm = () => {
                 setImagePreview(URL.createObjectURL(file));
             } else if (name === 'og_image') {
                 setFormData(prev => ({ ...prev, og_image: file }));
+                setOgImagePreview(URL.createObjectURL(file));
             }
         }
     };
@@ -434,14 +437,32 @@ const ProductForm = () => {
                                 </div>
                                 <div>
                                     <label className="block text-[#AAAAAA] text-xs font-bold uppercase tracking-wider mb-2">Social Media Share Image (OG Image)</label>
-                                    <input
-                                        type="file"
-                                        name="og_image"
-                                        onChange={handleFileChange}
-                                        accept="image/*"
-                                        className="w-full bg-[#121212] border border-[#333] text-white p-3 focus:outline-none focus:border-[#C41E3A] transition-colors"
-                                    />
-                                    {/* Ideally show preview if exists, but simplified for now */}
+                                    <div className="border-2 border-dashed border-[#333] p-4 text-center bg-[#121212] hover:border-[#C41E3A] transition-colors relative min-h-[150px] flex flex-col items-center justify-center">
+                                        <input
+                                            type="file"
+                                            name="og_image"
+                                            onChange={handleFileChange}
+                                            accept="image/*"
+                                            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                                        />
+                                        {ogImagePreview ? (
+                                            <div className="relative w-full h-full">
+                                                <img src={ogImagePreview} alt="OG Preview" className="max-h-[130px] mx-auto object-contain" />
+                                                <div className="absolute top-0 right-0 bg-black/50 p-1 rounded-full text-white cursor-pointer z-20 hover:bg-[#C41E3A]" onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setOgImagePreview(null);
+                                                    setFormData(prev => ({ ...prev, og_image: null }));
+                                                }}>
+                                                    <X className="w-4 h-4" />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="text-[#666] flex flex-col items-center gap-2">
+                                                <Upload className="w-6 h-6" />
+                                                <span className="text-sm"><span className="text-[#C41E3A] font-bold">Click to Upload</span></span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
