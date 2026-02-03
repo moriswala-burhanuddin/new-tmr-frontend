@@ -18,7 +18,7 @@ const SidebarFilter = ({
     onSelectCategory
 }: SidebarFilterProps) => {
     return (
-        <div className="bg-[#1A1A1A] p-8 border border-[#333] sticky top-24 shadow-2xl">
+        <div className="bg-[#1A1A1A] p-8 border border-[#333] lg:sticky lg:top-24 shadow-2xl">
             {/* Screw Accents */}
             <div className="absolute top-3 left-3 w-1.5 h-1.5 rounded-full bg-[#111] border border-[#444]"></div>
             <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-[#111] border border-[#444]"></div>

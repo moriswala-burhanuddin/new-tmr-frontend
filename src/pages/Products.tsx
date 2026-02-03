@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Filter, X } from 'lucide-react';
 import api from '../lib/axios';
 import Seo from '../components/common/Seo';
 import ProductCard from '../components/products/ProductCard';
@@ -14,6 +16,7 @@ const Products = () => {
     const [brands, setBrands] = useState<Brand[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     // Filters
     const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
@@ -95,8 +98,63 @@ const Products = () => {
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-8 items-start">
-                    {/* Sidebar */}
-                    <div className="w-full lg:w-1/4 sticky top-24">
+                    {/* Mobile Filter Toggle Button */}
+                    <div className="lg:hidden w-full mb-6">
+                        <button
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="w-full flex items-center justify-center gap-2 bg-[#1A1A1A] border border-[#333] hover:border-[#C41E3A] text-white font-bold py-4 uppercase tracking-[0.2em] transition-all"
+                        >
+                            <Filter className="w-5 h-5 text-[#C41E3A]" />
+                            Refine Products
+                        </button>
+                    </div>
+
+                    {/* Mobile Sidebar Slider */}
+                    <AnimatePresence>
+                        {isSidebarOpen && (
+                            <>
+                                {/* Backdrop */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    onClick={() => setIsSidebarOpen(false)}
+                                    className="fixed inset-0 bg-black/80 z-[100] backdrop-blur-sm lg:hidden"
+                                />
+                                {/* Slider Content */}
+                                <motion.div
+                                    initial={{ x: '-100%' }}
+                                    animate={{ x: 0 }}
+                                    exit={{ x: '-100%' }}
+                                    transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                                    className="fixed top-0 left-0 bottom-0 w-[85%] max-w-[400px] bg-[#121212] z-[101] overflow-y-auto lg:hidden"
+                                >
+                                    <div className="p-6">
+                                        <div className="flex justify-between items-center mb-8 border-b border-[#333] pb-4">
+                                            <h2 className="text-2xl font-bold text-white uppercase font-display leading-none">Filters</h2>
+                                            <button
+                                                onClick={() => setIsSidebarOpen(false)}
+                                                className="p-2 hover:bg-[#C41E3A] transition-colors rounded-sm"
+                                            >
+                                                <X className="w-6 h-6 text-white" />
+                                            </button>
+                                        </div>
+                                        <SidebarFilter
+                                            brands={brands}
+                                            categories={categories}
+                                            selectedBrand={selectedBrand}
+                                            selectedCategory={selectedCategory}
+                                            onSelectBrand={(val) => { setSelectedBrand(val); setIsSidebarOpen(false); }}
+                                            onSelectCategory={(val) => { setSelectedCategory(val); setIsSidebarOpen(false); }}
+                                        />
+                                    </div>
+                                </motion.div>
+                            </>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Desktop Sidebar (Hidden on Mobile) */}
+                    <div className="hidden lg:block w-1/4 sticky top-24">
                         <SidebarFilter
                             brands={brands}
                             categories={categories}
