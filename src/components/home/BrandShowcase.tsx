@@ -64,12 +64,19 @@ const BrandShowcase = () => {
                 </div>
 
                 <div className="space-y-32">
-                    {brands.map((brand) => {
+                    {brands.map((brand, bIndex) => {
                         const brandProducts = products.filter(p => {
                             return p.brands && p.brands.some(b => b.id === brand.id);
                         });
 
                         if (brandProducts.length === 0) return null;
+
+                        // Rotate products based on brand index to avoid repetition feel
+                        const rotateOffset = bIndex % brandProducts.length;
+                        const rotatedProducts = [
+                            ...brandProducts.slice(rotateOffset),
+                            ...brandProducts.slice(0, rotateOffset)
+                        ];
 
                         return (
                             <div key={brand.id} className="group/brand">
@@ -122,7 +129,7 @@ const BrandShowcase = () => {
                                     }}
                                     className="!pb-4 overflow-visible"
                                 >
-                                    {brandProducts.map((product) => (
+                                    {rotatedProducts.map((product) => (
                                         <SwiperSlide key={product.id}>
                                             <ProductCard product={product} />
                                         </SwiperSlide>

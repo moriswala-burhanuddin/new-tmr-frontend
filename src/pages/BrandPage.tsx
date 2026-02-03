@@ -92,18 +92,11 @@ const BrandPage = () => {
                 <div className="max-w-7xl mx-auto px-6 py-20 border-b border-[#333]">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                         <div className="lg:col-span-8">
-                            {brand.content && (
-                                <div
-                                    className="prose prose-xl prose-invert text-[#AAAAAA] max-w-none mb-12"
-                                    dangerouslySetInnerHTML={{ __html: brand.content.replace(/\n/g, '<br />') }}
-                                />
-                            )}
-                            {brand.html_content && (
-                                <div
-                                    className="prose prose-lg prose-invert text-[#888888] max-w-none border-l-4 border-[#C41E3A] pl-8 italic font-sans"
-                                    dangerouslySetInnerHTML={{ __html: brand.html_content }}
-                                />
-                            )}
+                            <p className="text-xl text-[#AAAAAA] leading-relaxed">
+                                Explore our comprehensive range of high-performance industrial solutions from {brand.name}.
+                                We are committed to providing genuine equipment and professional-grade tools that deliver
+                                reliability and power to your jobsite.
+                            </p>
                         </div>
                         <div className="lg:col-span-4 bg-[#1A1A1A] p-8 border border-[#333] relative">
                             <div className="absolute top-2 left-2 w-2 h-2 bg-[#121212] rounded-full border border-[#444]"></div>

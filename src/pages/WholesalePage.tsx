@@ -89,14 +89,10 @@ const WholesalePage = () => {
                         </h2>
 
                         <div className="prose prose-lg prose-invert text-[#AAAAAA] mb-12">
-                            {data?.content ? (
-                                <div dangerouslySetInnerHTML={{ __html: data.content.replace(/\n/g, '<br />') }} />
-                            ) : (
-                                <p>
-                                    At TMR Project, we understand the demands of large-scale operations. Our wholesale program is designed
-                                    to support contractors, resellers, and industrial facilities with reliable supply chains and preferential pricing.
-                                </p>
-                            )}
+                            <p>
+                                At TMR Project, we understand the demands of large-scale operations. Our wholesale program is designed
+                                to support contractors, resellers, and industrial facilities with reliable supply chains and preferential pricing.
+                            </p>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

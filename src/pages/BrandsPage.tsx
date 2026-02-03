@@ -60,41 +60,31 @@ const BrandsPage = () => {
                     </div>
                 </div>
 
-                {/* Global Brand Content Section */}
+                {/* Cleaned up layout - removed redundant text and expanded boxes */}
                 {(cmsContent?.content || cmsContent?.html_content) && (
-                    <div className="mb-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                        <div className="lg:col-span-7">
-                            {cmsContent?.content && (
-                                <div
-                                    className="prose prose-xl prose-invert text-[#888] mb-8"
-                                    dangerouslySetInnerHTML={{ __html: cmsContent.content.replace(/\n/g, '<br />') }}
-                                />
-                            )}
-                            {cmsContent?.html_content && (
-                                <div
-                                    className="text-[#AAAAAA] font-sans border-l-2 border-[#C41E3A] pl-6 italic"
-                                    dangerouslySetInnerHTML={{ __html: cmsContent.html_content }}
-                                />
-                            )}
-                        </div>
-                        <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="bg-[#1A1A1A] p-6 border border-[#333] flex flex-col items-center text-center group hover:border-[#C41E3A] transition-colors">
-                                <ShieldCheck className="w-8 h-8 text-[#C41E3A] mb-4" />
+                    <div className="mb-20">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div className="bg-[#1A1A1A] p-6 border border-[#333] flex flex-col items-center text-center group hover:border-[#C41E3A] transition-colors relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-1 opacity-20"><ShieldCheck className="w-4 h-4 text-[#C41E3A]" /></div>
+                                <ShieldCheck className="w-10 h-10 text-[#C41E3A] mb-4 group-hover:scale-110 transition-transform" />
                                 <div className="text-white font-bold uppercase tracking-widest text-xs mb-1">Authentic</div>
                                 <div className="text-[#666] text-[10px]">VERIFIED PARTNERS</div>
                             </div>
-                            <div className="bg-[#1A1A1A] p-6 border border-[#333] flex flex-col items-center text-center group hover:border-[#C41E3A] transition-colors">
-                                <Zap className="w-8 h-8 text-[#C41E3A] mb-4" />
+                            <div className="bg-[#1A1A1A] p-6 border border-[#333] flex flex-col items-center text-center group hover:border-[#C41E3A] transition-colors relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-1 opacity-20"><Zap className="w-4 h-4 text-[#C41E3A]" /></div>
+                                <Zap className="w-10 h-10 text-[#C41E3A] mb-4 group-hover:scale-110 transition-transform" />
                                 <div className="text-white font-bold uppercase tracking-widest text-xs mb-1">High Power</div>
                                 <div className="text-[#666] text-[10px]">INDUSTRIAL GRADE</div>
                             </div>
-                            <div className="bg-[#1A1A1A] p-6 border border-[#333] flex flex-col items-center text-center group hover:border-[#C41E3A] transition-colors">
-                                <Box className="w-8 h-8 text-[#C41E3A] mb-4" />
+                            <div className="bg-[#1A1A1A] p-6 border border-[#333] flex flex-col items-center text-center group hover:border-[#C41E3A] transition-colors relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-1 opacity-20"><Box className="w-4 h-4 text-[#C41E3A]" /></div>
+                                <Box className="w-10 h-10 text-[#C41E3A] mb-4 group-hover:scale-110 transition-transform" />
                                 <div className="text-white font-bold uppercase tracking-widest text-xs mb-1">Full Support</div>
                                 <div className="text-[#666] text-[10px]">EXPERT GUIDANCE</div>
                             </div>
-                            <div className="bg-[#1A1A1A] p-6 border border-[#333] flex flex-col items-center text-center group hover:border-[#C41E3A] transition-colors">
-                                <ArrowRight className="w-8 h-8 text-[#C41E3A] mb-4" />
+                            <div className="bg-[#1A1A1A] p-6 border border-[#333] flex flex-col items-center text-center group hover:border-[#C41E3A] transition-colors relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-1 opacity-20"><ArrowRight className="w-4 h-4 text-[#C41E3A]" /></div>
+                                <ArrowRight className="w-10 h-10 text-[#C41E3A] mb-4 group-hover:scale-110 transition-transform" />
                                 <div className="text-white font-bold uppercase tracking-widest text-xs mb-1">Direct Sourcing</div>
                                 <div className="text-[#666] text-[10px]">BEST MARKET VALUE</div>
                             </div>
