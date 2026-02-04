@@ -108,7 +108,7 @@ const ProductDetail = () => {
                                             src={fixImageUrl(brand.logo)}
                                             alt={brand.name}
                                             title={brand.name}
-                                            className="h-8 md:h-10 w-auto object-contain grayscale group-hover/logo:grayscale-0 transition-all"
+                                            className="h-8 md:h-10 w-auto object-contain transition-all"
                                         />
                                     </div>
                                 ))}
@@ -151,19 +151,17 @@ const ProductDetail = () => {
                             </div>
 
                             {/* Specifications / Description */}
-                            <div className="bg-[#1A1A1A] border border-[#333] p-6 mb-8 relative">
-                                <div className="absolute top-0 left-0 w-full h-[2px] bg-[#C41E3A]"></div>
-                                <h3 className="text-white font-bold uppercase tracking-wider mb-4 font-display flex items-center gap-2">
-                                    <Zap className="w-4 h-4 text-[#C41E3A]" /> Technical Specifications
-                                </h3>
-                                <div className="prose prose-invert prose-sm text-[#AAAAAA]">
-                                    {product.specifications ? (
+                            {product.specifications && (
+                                <div className="bg-[#1A1A1A] border border-[#333] p-6 mb-8 relative">
+                                    <div className="absolute top-0 left-0 w-full h-[2px] bg-[#C41E3A]"></div>
+                                    <h3 className="text-white font-bold uppercase tracking-wider mb-4 font-display flex items-center gap-2">
+                                        <Zap className="w-4 h-4 text-[#C41E3A]" /> Technical Specifications
+                                    </h3>
+                                    <div className="prose prose-invert prose-sm text-[#AAAAAA]">
                                         <p className="whitespace-pre-line">{product.specifications}</p>
-                                    ) : (
-                                        <p className="italic opacity-50">Technical details pending...</p>
-                                    )}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Actions */}
                             <div className="flex flex-col gap-4 mb-8">
