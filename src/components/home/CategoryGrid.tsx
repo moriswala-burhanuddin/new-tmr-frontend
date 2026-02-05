@@ -62,8 +62,8 @@ const CategoryGrid = () => {
                                 <div className="relative flex-1 bg-black overflow-hidden border border-[#222]">
 
                                     {/* Content Overlay */}
-                                    <div className="absolute inset-0 z-10 flex flex-col p-8 bg-gradient-to-t from-black via-transparent to-black/40">
-                                        <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-auto font-display drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] group-hover:text-[#C41E3A] transition-colors duration-300 leading-none">
+                                    <div className="absolute inset-0 z-10 flex flex-col p-8 bg-transparent transition-colors duration-500">
+                                        <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-auto font-display drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] group-hover:text-[#C41E3A] transition-colors duration-300 leading-none">
                                             {category.title}
                                         </h3>
 
@@ -78,7 +78,7 @@ const CategoryGrid = () => {
                                     <img
                                         src={category.image}
                                         alt={category.title}
-                                        className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000"
+                                        className="absolute inset-0 w-full h-full object-cover opacity-100 group-hover:scale-110 transition-all duration-1000"
                                     />
 
                                     {/* Corner Accents */}
