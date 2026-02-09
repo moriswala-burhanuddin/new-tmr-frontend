@@ -1,22 +1,31 @@
+import { X } from "lucide-react";
 import type { Brand, Category } from "../../types";
 
 interface SidebarFilterProps {
     brands: Brand[];
     categories: Category[];
     selectedBrand: string | null;
-    selectedCategory: string | null;
+    selectedCategories: string[];
     onSelectBrand: (brandId: string | null) => void;
-    onSelectCategory: (categorySlug: string | null) => void;
+    onSelectCategories: (categorySlugs: string[]) => void;
 }
 
 const SidebarFilter = ({
     brands,
     categories,
     selectedBrand,
-    selectedCategory,
+    selectedCategories,
     onSelectBrand,
-    onSelectCategory
+    onSelectCategories
 }: SidebarFilterProps) => {
+    const handleCategoryToggle = (slug: string) => {
+        if (selectedCategories.includes(slug)) {
+            onSelectCategories(selectedCategories.filter(s => s !== slug));
+        } else {
+            onSelectCategories([...selectedCategories, slug]);
+        }
+    };
+
     return (
         <div className="bg-[#1A1A1A] p-8 border border-[#333] lg:sticky lg:top-24 shadow-2xl">
             {/* Screw Accents */}
@@ -34,18 +43,21 @@ const SidebarFilter = ({
                 </h4>
                 <div className="space-y-1">
                     <button
-                        onClick={() => onSelectCategory(null)}
-                        className={`block text-xs w-full text-left py-2.5 px-4 transition-all uppercase font-bold tracking-wider ${selectedCategory === null ? 'bg-[#C41E3A] text-white' : 'text-[#666] hover:text-white hover:bg-[#222]'}`}
+                        onClick={() => onSelectCategories([])}
+                        className={`block text-xs w-full text-left py-2.5 px-4 transition-all uppercase font-bold tracking-wider ${selectedCategories.length === 0 ? 'bg-[#C41E3A] text-white' : 'text-[#666] hover:text-white hover:bg-[#222]'}`}
                     >
                         All Categories
                     </button>
                     {categories.map((cat) => (
                         <button
                             key={cat.id}
-                            onClick={() => onSelectCategory(cat.slug)}
-                            className={`block text-xs w-full text-left py-2.5 px-4 transition-all uppercase font-bold tracking-wider ${selectedCategory === cat.slug ? 'bg-[#C41E3A] text-white' : 'text-[#666] hover:text-white hover:bg-[#222]'}`}
+                            onClick={() => handleCategoryToggle(cat.slug)}
+                            className={`block text-xs w-full text-left py-2.5 px-4 transition-all uppercase font-bold tracking-wider ${selectedCategories.includes(cat.slug) ? 'bg-[#C41E3A] text-white' : 'text-[#666] hover:text-white hover:bg-[#222]'}`}
                         >
-                            {cat.name}
+                            <div className="flex items-center justify-between">
+                                <span>{cat.name}</span>
+                                {selectedCategories.includes(cat.slug) && <X className="w-3 h-3" />}
+                            </div>
                         </button>
                     ))}
                 </div>

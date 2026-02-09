@@ -20,7 +20,7 @@ const Products = () => {
 
     // Filters
     const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
     // Parse URL params on mount
     useEffect(() => {
@@ -29,7 +29,9 @@ const Products = () => {
         const categoryParam = searchParams.get('category');
 
         if (brandParam) setSelectedBrand(brandParam.toLowerCase());
-        if (categoryParam) setSelectedCategory(categoryParam.toLowerCase());
+        if (categoryParam) {
+            setSelectedCategories(categoryParam.toLowerCase().split(','));
+        }
     }, [location.search]);
 
     // Initial Data Fetch
@@ -56,7 +58,7 @@ const Products = () => {
             try {
                 const params: any = {};
                 if (selectedBrand) params.brand = selectedBrand;
-                if (selectedCategory) params.category = selectedCategory;
+                if (selectedCategories.length > 0) params.category = selectedCategories.join(',');
 
                 const response = await api.get('products/', { params });
                 setProducts(response.data);
@@ -68,10 +70,10 @@ const Products = () => {
         };
 
         // Fetch if categories loaded or no category selected
-        if (categories.length > 0 || selectedCategory === null) {
+        if (categories.length > 0 || selectedCategories.length === 0) {
             fetchProducts();
         }
-    }, [selectedBrand, selectedCategory, categories]);
+    }, [selectedBrand, selectedCategories, categories]);
 
 
 
@@ -143,9 +145,9 @@ const Products = () => {
                                             brands={brands}
                                             categories={categories}
                                             selectedBrand={selectedBrand}
-                                            selectedCategory={selectedCategory}
+                                            selectedCategories={selectedCategories}
                                             onSelectBrand={(val) => { setSelectedBrand(val); setIsSidebarOpen(false); }}
-                                            onSelectCategory={(val) => { setSelectedCategory(val); setIsSidebarOpen(false); }}
+                                            onSelectCategories={(val) => { setSelectedCategories(val); setIsSidebarOpen(false); }}
                                         />
                                     </div>
                                 </motion.div>
@@ -159,9 +161,9 @@ const Products = () => {
                             brands={brands}
                             categories={categories}
                             selectedBrand={selectedBrand}
-                            selectedCategory={selectedCategory}
+                            selectedCategories={selectedCategories}
                             onSelectBrand={setSelectedBrand}
-                            onSelectCategory={setSelectedCategory}
+                            onSelectCategories={setSelectedCategories}
                         />
                     </div>
 
@@ -184,7 +186,7 @@ const Products = () => {
                                 <h3 className="text-2xl font-bold text-white uppercase font-display mb-2">No Equipment Found</h3>
                                 <p className="text-[#888] mb-6">Adjust your filters to refine your search.</p>
                                 <button
-                                    onClick={() => { setSelectedBrand(null); setSelectedCategory(null); }}
+                                    onClick={() => { setSelectedBrand(null); setSelectedCategories([]); }}
                                     className="text-[#C41E3A] font-bold uppercase tracking-wider hover:text-white transition-colors border-b border-[#C41E3A] pb-1"
                                 >
                                     Clear All Filters

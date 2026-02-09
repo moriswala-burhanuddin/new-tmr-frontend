@@ -23,7 +23,7 @@ export interface Product {
     is_featured: boolean;
     specifications: string;
     brands: Brand[];
-    category: Category | number | null;
+    categories: Category[];
     meta_title?: string;
     meta_description?: string;
     meta_keywords?: string;
@@ -46,6 +46,17 @@ export interface Category {
     id: number;
     name: string;
     slug: string;
+}
+
+export interface HomeCategory {
+    id: number;
+    category: number;
+    category_slug: string;
+    title: string;
+    image: string | null;
+    order: number;
+    display_title: string;
+    display_image: string | null;
 }
 
 export interface User {

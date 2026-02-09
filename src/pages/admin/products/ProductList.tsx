@@ -62,12 +62,9 @@ const ProductList = () => {
         const brandIds = product.brands.map(b => b.id.toString());
         const matchesBrand = selectedBrand ? brandIds.includes(selectedBrand) : true;
 
-        // Handle category as object or ID
-        const categoryId = typeof product.category === 'object' && product.category !== null
-            ? (product.category as any).id?.toString()
-            : product.category?.toString();
-
-        const matchesCategory = selectedCategory ? categoryId === selectedCategory : true;
+        // Handle categories as array
+        const categoryIds = product.categories.map(c => c.id.toString());
+        const matchesCategory = selectedCategory ? categoryIds.includes(selectedCategory) : true;
 
         return matchesSearch && matchesBrand && matchesCategory;
     });
@@ -98,7 +95,7 @@ const ProductList = () => {
                     className="bg-[#121212] border border-[#333] text-white p-2 focus:outline-none focus:border-[#C41E3A]"
                 >
                     <option value="">All Categories</option>
-                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    {categories.map(c => <option key={c.id} value={c.id.toString()}>{c.name}</option>)}
                 </select>
                 <select
                     value={selectedBrand}
@@ -106,7 +103,7 @@ const ProductList = () => {
                     className="bg-[#121212] border border-[#333] text-white p-2 focus:outline-none focus:border-[#C41E3A]"
                 >
                     <option value="">All Brands</option>
-                    {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+                    {brands.map(b => <option key={b.id} value={b.id.toString()}>{b.name}</option>)}
                 </select>
             </div>
 
@@ -116,7 +113,7 @@ const ProductList = () => {
                         <tr className="bg-[#111] border-b border-[#333]">
                             <th className="p-4 text-[#AAAAAA] font-bold uppercase text-xs tracking-wider">Image</th>
                             <th className="p-4 text-[#AAAAAA] font-bold uppercase text-xs tracking-wider">Name</th>
-                            <th className="p-4 text-[#AAAAAA] font-bold uppercase text-xs tracking-wider">Category</th>
+                            <th className="p-4 text-[#AAAAAA] font-bold uppercase text-xs tracking-wider">Categories</th>
                             <th className="p-4 text-[#AAAAAA] font-bold uppercase text-xs tracking-wider">Brand</th>
                             <th className="p-4 text-[#AAAAAA] font-bold uppercase text-xs tracking-wider">Featured</th>
                             <th className="p-4 text-[#AAAAAA] font-bold uppercase text-xs tracking-wider">Actions</th>
@@ -134,7 +131,7 @@ const ProductList = () => {
                                 </td>
                                 <td className="p-4 text-white font-semibold">{product.name}</td>
                                 <td className="p-4 text-[#AAAAAA]">
-                                    {product.category && typeof product.category === 'object' ? product.category.name : '-'}
+                                    {product.categories.map(c => c.name).join(', ') || '-'}
                                 </td>
                                 <td className="p-4 text-[#AAAAAA]">
                                     {product.brands.map(b => b.name).join(', ') || '-'}

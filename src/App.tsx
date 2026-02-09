@@ -24,6 +24,8 @@ import ProductForm from './pages/admin/products/ProductForm';
 import PageList from './pages/admin/pages/PageList';
 import PageForm from './pages/admin/pages/PageForm';
 import LeadsList from './pages/admin/leads/LeadsList';
+import HomeCategoryList from './pages/admin/categories/HomeCategoryList';
+import HomeCategoryForm from './pages/admin/categories/HomeCategoryForm';
 
 import ScrollToTop from './components/common/ScrollToTop';
 
@@ -57,6 +59,10 @@ function App() {
           <Route path="categories" element={<CategoryList />} />
           <Route path="categories/new" element={<CategoryForm />} />
           <Route path="categories/:id" element={<CategoryForm />} />
+          {/* Home Categories */}
+          <Route path="home-categories" element={<HomeCategoryList />} />
+          <Route path="home-categories/new" element={<HomeCategoryForm />} />
+          <Route path="home-categories/:id" element={<HomeCategoryForm />} />
           {/* Products */}
           <Route path="products" element={<ProductList />} />
           <Route path="products/new" element={<ProductForm />} />

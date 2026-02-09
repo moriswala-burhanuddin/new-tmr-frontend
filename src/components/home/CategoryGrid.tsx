@@ -1,53 +1,45 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../../lib/axios';
+import { fixImageUrl } from '../../lib/utils';
+import type { HomeCategory } from '../../types';
 
 const CategoryGrid = () => {
-    const categories = [
-        {
-            id: 1,
-            title: 'POWER TOOLS',
-            image: '/assets/images/category-power-tools.png',
-            link: '/products?category=power-tools'
-        },
-        {
-            id: 2,
-            title: 'HAND TOOLS',
-            image: '/assets/images/hand-tools.png',
-            link: '/products?category=hand-tools'
-        },
-        {
-            id: 3,
-            title: 'LIFTING EQUIPMENT',
-            image: '/assets/images/lifting-eq.png',
-            link: '/products?category=lifting-equipment'
-        },
-        {
-            id: 4,
-            title: 'Industrial tools',
-            image: '/assets/images/Industrial tools.png',
-            link: '/products?category=industrial-tools'
-        },
-        {
-            id: 5,
-            title: 'Furniture hardware and fittings',
-            image: '/assets/images/Furniture hardware and fittings.png',
-            link: '/products?category=furniture-hardware'
-        },
-        {
-            id: 6,
-            title: 'oil and lubricants',
-            image: '/assets/images/oil.png',
-            link: '/products?category=oil-and-lubricants'
-        }
-    ];
+    const [categories, setCategories] = useState<HomeCategory[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchHomeCategories = async () => {
+            try {
+                const response = await api.get('home-categories/');
+                setCategories(response.data);
+            } catch (error) {
+                console.error("Failed to fetch home categories", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchHomeCategories();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="py-24 bg-[#0a0a0a] flex justify-center items-center">
+                <div className="w-12 h-12 border-4 border-[#333] border-t-[#C41E3A] rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
+    if (categories.length === 0) return null;
 
     return (
         <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
             <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    {categories.map((category) => (
+                    {categories.map((item) => (
                         <Link
-                            key={category.id}
-                            to={category.link}
+                            key={item.id}
+                            to={`/products?category=${item.category_slug}`}
                             className="group relative block pt-10"
                         >
                             {/* Industrial Topper */}
@@ -64,7 +56,7 @@ const CategoryGrid = () => {
                                     {/* Content Overlay */}
                                     <div className="absolute inset-0 z-10 flex flex-col p-8 bg-transparent transition-colors duration-500">
                                         <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-auto font-display drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] group-hover:text-[#C41E3A] transition-colors duration-300 leading-none">
-                                            {category.title}
+                                            {item.display_title}
                                         </h3>
 
                                         <div className="mt-auto">
@@ -75,11 +67,17 @@ const CategoryGrid = () => {
                                     </div>
 
                                     {/* Image */}
-                                    <img
-                                        src={category.image}
-                                        alt={category.title}
-                                        className="absolute inset-0 w-full h-full object-cover opacity-100 group-hover:scale-110 transition-all duration-1000"
-                                    />
+                                    {item.display_image ? (
+                                        <img
+                                            src={fixImageUrl(item.display_image)}
+                                            alt={item.display_title}
+                                            className="absolute inset-0 w-full h-full object-cover opacity-100 group-hover:scale-110 transition-all duration-1000"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center text-[#333] uppercase font-bold tracking-widest bg-[#111]">
+                                            No Image
+                                        </div>
+                                    )}
 
                                     {/* Corner Accents */}
                                     <div className="absolute inset-0 opacity-20 pointer-events-none">

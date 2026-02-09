@@ -143,9 +143,13 @@ const ProductDetail = () => {
                                 <h1 className="text-4xl md:text-5xl font-bold text-white uppercase tracking-tighter font-display leading-none mb-4">
                                     {product.name}
                                 </h1>
-                                {product.category && (
-                                    <div className="inline-block px-3 py-1 border border-[#444] rounded-full text-xs text-[#888] uppercase tracking-wide">
-                                        {typeof product.category === 'object' ? product.category.name : 'Category'}
+                                {product.categories && product.categories.length > 0 && (
+                                    <div className="flex flex-wrap gap-2">
+                                        {product.categories.map(cat => (
+                                            <div key={cat.id} className="inline-block px-3 py-1 border border-[#444] rounded-full text-xs text-[#888] uppercase tracking-wide">
+                                                {cat.name}
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                             </div>

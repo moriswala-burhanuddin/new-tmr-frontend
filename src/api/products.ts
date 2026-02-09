@@ -18,8 +18,7 @@ export interface Product {
     id: number;
     name: string;
     slug: string;
-    category: any;
-    category_details?: { id: number; name: string; slug: string };
+    categories: any[];
     brands: Brand[];
     image: string | null;
     is_featured: boolean;

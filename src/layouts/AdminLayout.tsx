@@ -10,7 +10,8 @@ import {
     FileText,
     Menu,
     X,
-    LogOut
+    LogOut,
+    Grip
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -48,6 +49,9 @@ const AdminLayout = () => {
             </Link>
             <Link to="/admin/products" className={`px-6 py-3 flex items-center transition-all border-l-4 ${isActive('/admin/products') ? 'bg-[#C41E3A]/10 text-[#C41E3A] border-[#C41E3A]' : 'text-[#AAAAAA] border-transparent hover:bg-white/5 hover:text-white'}`}>
                 <Package className="w-5 h-5 mr-3" /> Products
+            </Link>
+            <Link to="/admin/home-categories" className={`px-6 py-3 flex items-center transition-all border-l-4 ${isActive('/admin/home-categories') ? 'bg-[#C41E3A]/10 text-[#C41E3A] border-[#C41E3A]' : 'text-[#AAAAAA] border-transparent hover:bg-white/5 hover:text-white'}`}>
+                <Grip className="w-5 h-5 mr-3" /> Home Grid
             </Link>
             <Link to="/admin/leads" className={`px-6 py-3 flex items-center transition-all border-l-4 ${isActive('/admin/leads') ? 'bg-[#C41E3A]/10 text-[#C41E3A] border-[#C41E3A]' : 'text-[#AAAAAA] border-transparent hover:bg-white/5 hover:text-white'}`}>
                 <Mail className="w-5 h-5 mr-3" /> Inquiries

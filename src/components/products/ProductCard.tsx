@@ -65,7 +65,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                                 </span>
                             )}
                             <span className="text-[#C41E3A] text-xs font-bold uppercase tracking-[0.2em] font-display">
-                                {(product.category && typeof product.category === 'object' ? product.category.name : 'UNCATEGORIZED')}
+                                {product.categories && product.categories.length > 0 ? product.categories[0].name : 'UNCATEGORIZED'}
                             </span>
                         </div>
 
