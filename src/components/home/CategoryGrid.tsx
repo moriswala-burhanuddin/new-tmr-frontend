@@ -13,8 +13,11 @@ const CategoryGrid = () => {
             try {
                 const response = await api.get('home-categories/');
                 setCategories(response.data);
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Failed to fetch home categories", error);
+                const status = error.response?.status;
+                const data = error.response?.data;
+                console.error(`Status: ${status}, Data: ${JSON.stringify(data)}`);
             } finally {
                 setLoading(false);
             }

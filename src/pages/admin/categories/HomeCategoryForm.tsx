@@ -93,9 +93,22 @@ const HomeCategoryForm = () => {
             setFormData(prev => ({ ...prev, category: res.data.id.toString() }));
             setNewCategoryName('');
             setShowCategoryModal(false);
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to add category", err);
-            toast.error("Failed to add category.");
+            const errorData = err.response?.data;
+            let errorMessage = "Failed to add category.";
+
+            if (errorData) {
+                if (typeof errorData === 'object') {
+                    errorMessage = Object.entries(errorData)
+                        .map(([field, errors]) => `${field}: ${Array.isArray(errors) ? errors.join(', ') : errors}`)
+                        .join(' | ');
+                } else {
+                    errorMessage = errorData.toString();
+                }
+            }
+
+            toast.error(errorMessage);
         } finally {
             setModalLoading(false);
         }
