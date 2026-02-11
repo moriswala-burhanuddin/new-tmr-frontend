@@ -10,7 +10,7 @@ interface SeoProps {
 }
 
 const Seo = ({ title, description, keywords, url, image }: SeoProps) => {
-    const siteTitle = 'TMR Project';
+    const siteTitle = 'TMR International';
     const finalTitle = title ? `${title} | ${siteTitle}` : siteTitle;
     const finalDescription = description || "High-quality industrial equipment and hardware products.";
 
