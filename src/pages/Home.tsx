@@ -32,7 +32,7 @@ const Home = () => {
         <div className="bg-transparent text-white">
             <Seo
                 title={content?.seo_title || "Home"}
-                description={content?.seo_description || "Welcome to TMR Project, your source for premium hardware products."}
+                description={content?.seo_description || "Welcome to TMR International, your source for premium hardware products."}
                 keywords={content?.seo_keywords}
             />
             <Hero />
